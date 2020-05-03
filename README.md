@@ -6,6 +6,9 @@ The purpose of this project is to help you in these situations. You can submit a
 
 # Tech Stack Used
 React
+
 Typescript
+
 Google Material design implemented using Material UI
+
 Express and MySQL backend.
