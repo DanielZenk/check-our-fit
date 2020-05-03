@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import HomePage from './HomePage';
+import {Main} from './MainPage/Main';
 import * as serviceWorker from './serviceWorker';
 
+//should render homepage but this skips the login
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Main user="daniel"/> 
   </React.StrictMode>,
   document.getElementById('root')
 );
