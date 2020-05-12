@@ -1,57 +1,52 @@
-import React, {useState} from 'react'
+import React from "react";
 //material components
-import { TextField, Paper, Grid } from "@material-ui/core";
+import { Paper, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+//created components
+import { ImageCarousel } from "../ImageCarousel/ImageCarousel";
+import { Questionnaire } from "../QuestionPanel/Questionnaire";
 
-
-interface Props {
-}
+interface Props {}
 
 const styles = makeStyles({
   root: {
     flexGrow: 1,
   },
   leftPaper: {
-    marginLeft: "10px",
     marginTop: "5px",
-    width: "97%",
+    marginLeft: "4px",
+    height: "97%",
   },
   rightPaper: {
-    width: "95%",
     marginTop: "5px",
+    marginLeft: "4px",
+    height: "97%",
   },
 });
 
 export const Browse: React.FC<Props> = () => {
-
   const classes = styles();
+
+  const imagesArray = [
+    "https://picsum.photos/id/1018/1000/600/",
+    "https://picsum.photos/id/1018/1000/600/",
+    "https://picsum.photos/id/1018/1000/600/",
+  ];
 
   return (
     <div className={classes.root}>
       <Grid container justify="center" alignItems="stretch">
-        <Grid item xs={8}>
+        <Grid item xs={12} md={8}>
           <Paper className={classes.leftPaper}>
-            <div>hello</div>
-            <div>hello</div>
-            <div>hello</div>
-            <div>hello</div>
-            <div>hello</div>
-            <div>hello</div>
-            <div>hello</div>
+            <ImageCarousel images={imagesArray} />
           </Paper>
         </Grid>
-        <Grid item xs={4}>
-          <Paper className={classes.leftPaper}>
-            <div>hello</div>
-            <div>hello</div>
-            <div>hello</div>
-            <div>hello</div>
-            <div>hello</div>
-            <div>hello</div>
-            <div>hello</div>
+        <Grid item xs={12} md={4}>
+          <Paper className={classes.rightPaper}>
+            <Questionnaire />
           </Paper>
         </Grid>
       </Grid>
     </div>
-  )
+  );
 };

@@ -1,16 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import HomePage from './HomePage';
-import {Main} from './MainPage/Main';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+//import HomePage from './HomePage';
+import { Main } from "./MainPage/Main";
+import * as serviceWorker from "./serviceWorker";
 
 //should render homepage but this skips the login
 ReactDOM.render(
   <React.StrictMode>
-    <Main user="daniel"/> 
+    <Main user="daniel" />
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

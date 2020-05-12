@@ -4,6 +4,7 @@ import React, {useState} from 'react';
 //created components
 import { TopBar } from '../AppBar/TopBar';
 import { Browse } from '../BrowsePage/Browse';
+import { UserPosts } from '../PostsPage/UserPosts';
 
 interface Props {
   user: string;
@@ -24,7 +25,7 @@ export const Main = ({user}: Props) => {
     }
 
     if(currentPage === "Your Posts") {
-      return <div>ur posts</div>;
+      return <UserPosts />;
     }
 
   }
