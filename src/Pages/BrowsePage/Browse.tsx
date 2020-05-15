@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 //material components
 import { Paper, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+//axios import
 //created components
-import { ImageCarousel } from "../ImageCarousel/ImageCarousel";
-import { Questionnaire } from "../QuestionPanel/Questionnaire";
+import { ImageCarousel } from "../../Components/ImageCarousel";
+import { Questionnaire } from "../../Components/Questionnaire";
 
 interface Props {}
 
@@ -27,11 +28,27 @@ const styles = makeStyles({
 export const Browse: React.FC<Props> = () => {
   const classes = styles();
 
+  const [posts, setPosts] = useState([
+    {
+      questions: [],
+    },
+  ]);
+
   const imagesArray = [
     "https://picsum.photos/id/1018/1000/600/",
     "https://picsum.photos/id/1018/1000/600/",
     "https://picsum.photos/id/1018/1000/600/",
   ];
+
+  // componentDidMount() {
+  //   axios.get("/posts")
+  // }
+
+  useEffect(() => {
+    fetch("/posts")
+      .then((res) => res.json())
+      .then((result) => setPosts(result));
+  });
 
   return (
     <div className={classes.root}>
@@ -43,7 +60,9 @@ export const Browse: React.FC<Props> = () => {
         </Grid>
         <Grid item xs={12} md={4}>
           <Paper className={classes.rightPaper}>
-            <Questionnaire />
+            {posts.length > 0 ? (
+              <Questionnaire questions={posts[0].questions} />
+            ) : null}
           </Paper>
         </Grid>
       </Grid>

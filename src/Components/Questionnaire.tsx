@@ -3,7 +3,14 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, FormControl, TextField, MenuItem } from "@material-ui/core";
 
-interface Props {}
+interface Props {
+  questions?: Array<{
+    questionText: string;
+    // answers: Array<{
+
+    // }>;
+  }>;
+}
 
 const styles = makeStyles({
   question: {
@@ -16,49 +23,35 @@ const styles = makeStyles({
   },
 });
 
-export const Questionnaire: React.FC<Props> = () => {
+export const Questionnaire = ({ questions }: Props) => {
   const classes = styles();
 
-  const questions = [
-    {
-      question: "What are pigs?",
-      answers: ["mammals", "reptiles", "insects", "other"],
-    },
-    {
-      question: "What are pigs?",
-      answers: ["mammals", "reptiles", "insects", "other"],
-    },
-    {
-      question: "What are pigs?",
-      answers: ["mammals", "reptiles", "insects", "other"],
-    },
-  ];
-
-  function renderQuestions() {
+  const renderQuestions = () => {
+    if (!questions) return;
     return questions.map((question) => {
       return (
         <TextField
           className={classes.question}
           select
-          label={question.question}
+          label={question.questionText}
         >
-          {question.answers.map((answer) => {
+          {/* {question.answers.map((answer) => {
             return (
               <MenuItem key={answer} value={answer}>
                 {answer}
               </MenuItem>
             );
-          })}
+          })} */}
         </TextField>
       );
     });
-  }
+  };
 
   return (
     <>
       <div>
         <FormControl className={classes.questionsBlock} fullWidth>
-          {renderQuestions()}
+          {questions ? renderQuestions() : null}
         </FormControl>
       </div>
       <div>

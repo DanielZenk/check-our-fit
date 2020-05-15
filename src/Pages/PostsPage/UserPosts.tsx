@@ -33,7 +33,7 @@ export const UserPosts: React.FC<Props> = () => {
 
   const classes = styles();
   //() => clickCard(id)
-  function renderCard(id: number) {
+  const renderCard = (id: number) => {
     return (
       <Grid item xs={12} sm={4} md={3}>
         <Card className={classes.card}>
@@ -63,19 +63,19 @@ export const UserPosts: React.FC<Props> = () => {
         </Card>
       </Grid>
     );
-  }
+  };
 
   //map through cards and render
-  function renderCards() {
+  const renderCards = () => {
     const randomArray = [1, 2, 3, 4, 5, 6, 7];
     return randomArray.map((index) => {
       return renderCard(randomArray[index]);
     });
-  }
+  };
 
-  function renderIndividualPost() {
+  const renderIndividualPost = () => {
     return <IndividualPost />;
-  }
+  };
 
   return (
     <Grid container>

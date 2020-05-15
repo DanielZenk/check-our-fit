@@ -14,7 +14,7 @@ interface Props {
 export const ImageCarousel: React.FC<Props> = ({ images }) => {
   //const classes = styles();
 
-  function renderImages() {
+  const renderImages = () => {
     return images.map((imgSrc) => {
       return (
         <div>
@@ -22,7 +22,7 @@ export const ImageCarousel: React.FC<Props> = ({ images }) => {
         </div>
       );
     });
-  }
+  };
 
   return <Carousel>{renderImages()}</Carousel>;
 };

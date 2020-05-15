@@ -63,7 +63,7 @@ export const IndividualPost: React.FC<Props> = () => {
     },
   ];
 
-  function renderGraph(questionNumber: number) {
+  const renderGraph = (questionNumber: number) => {
     return (
       <>
         <Typography variant="h6">{data[questionNumber].question}</Typography>
@@ -92,9 +92,9 @@ export const IndividualPost: React.FC<Props> = () => {
         </VictoryChart>
       </>
     );
-  }
+  };
 
-  function renderResponses() {
+  const renderResponses = () => {
     return data.map((question, index) => {
       return (
         <Grid item xs={6}>
@@ -108,7 +108,7 @@ export const IndividualPost: React.FC<Props> = () => {
         </Grid>
       );
     });
-  }
+  };
 
   return <>{renderResponses()}</>;
 };
