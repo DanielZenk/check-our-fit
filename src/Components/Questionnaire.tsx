@@ -1,7 +1,7 @@
 import React from "react";
 //material components
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, FormControl, TextField, MenuItem } from "@material-ui/core";
+import { Button, FormControl, TextField } from "@material-ui/core";
 
 interface Props {
   questions?: Array<{
@@ -18,23 +18,17 @@ const styles = makeStyles({
     width: "95%",
     marginLeft: "5px",
   },
-  questionsBlock: {
-    marginTop: "15px",
-  },
 });
 
-export const Questionnaire = ({ questions }: Props) => {
+export const Questionnaire: React.FC<Props> = ({ questions }) => {
   const classes = styles();
 
   const renderQuestions = () => {
     if (!questions) return;
+    console.log(questions);
     return questions.map((question) => {
       return (
-        <TextField
-          className={classes.question}
-          select
-          label={question.questionText}
-        >
+        <TextField className={classes.question} label={question.questionText}>
           {/* {question.answers.map((answer) => {
             return (
               <MenuItem key={answer} value={answer}>
@@ -50,7 +44,7 @@ export const Questionnaire = ({ questions }: Props) => {
   return (
     <>
       <div>
-        <FormControl className={classes.questionsBlock} fullWidth>
+        <FormControl fullWidth>
           {questions ? renderQuestions() : null}
         </FormControl>
       </div>
