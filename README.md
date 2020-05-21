@@ -12,3 +12,5 @@ Typescript
 Google Material design implemented using Material UI
 
 Express and FireBase backend.
+
+Webpack deployment.
