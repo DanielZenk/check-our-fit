@@ -58,16 +58,6 @@ export const Browse: React.FC<Props> = () => {
 
   const [posts, setPosts] = useState<Array<PostData> | undefined>(undefined);
 
-  // const [currPost, setCurrPost] = useState({});
-
-  // componentDidMount() {
-  //   axios.get("/posts")
-  // }
-
-  // const updateCurrPost = () => {
-  //   if (posts) setCurrPost(posts[0]);
-  // };
-
   useEffect(() => {
     if (!posts) {
       fetch("/api/posts")
