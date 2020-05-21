@@ -15,9 +15,9 @@ export const ImageCarousel: React.FC<Props> = ({ images }) => {
   //const classes = styles();
 
   const renderImages = () => {
-    return images.map((imgSrc) => {
+    return images.map((imgSrc, index) => {
       return (
-        <div>
+        <div key={index}>
           <img src={imgSrc} alt="temp" />
         </div>
       );

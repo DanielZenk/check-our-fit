@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 //material components
 import {
   Avatar,
@@ -14,14 +14,35 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 //created components
 import { ImageCarousel } from "./ImageCarousel";
-import { Questionnaire } from "./Questionnaire";
+const Questionnaire = React.lazy(() =>
+  import("./Questionnaire").then(({ Questionnaire }) => ({
+    default: Questionnaire,
+  }))
+);
 
 interface Props {
   post?: {
     questions: Array<{
       questionText: string;
       totalResponses: number;
-      answers?: object;
+      answers: {
+        0?: {
+          timesAnswered: number;
+          answerText: string;
+        };
+        1?: {
+          timesAnswered: number;
+          answerText: string;
+        };
+        2?: {
+          timesAnswered: number;
+          answerText: string;
+        };
+        3?: {
+          timesAnswered: number;
+          answerText: string;
+        };
+      };
     }>;
     postId: string;
     createdAt: string;
@@ -77,7 +98,9 @@ export const PostCard: React.FC<Props> = ({ post }) => {
         </CardActions>
         <Collapse in={expanded}>
           <CardContent>
-            <Questionnaire questions={post.questions} />
+            <Suspense fallback={<h3>Questions being loaded...</h3>}>
+              <Questionnaire questions={post.questions} postId={post.postId} />
+            </Suspense>
           </CardContent>
         </Collapse>
       </Card>

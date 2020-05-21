@@ -1,10 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 //material components
 
-//created components
-import { TopBar } from "../../Components/TopBar";
 import { Browse } from "../BrowsePage/Browse";
-import { UserPosts } from "../PostsPage/UserPosts";
+
+//lazy load created components
+
+const TopBar = React.lazy(() =>
+  import("../../Components/TopBar").then(({ TopBar }) => ({
+    default: TopBar,
+  }))
+);
+
+const UserPosts = React.lazy(() =>
+  import("../PostsPage/UserPosts").then(({ UserPosts }) => ({
+    default: UserPosts,
+  }))
+);
 
 interface Props {
   user: string;
@@ -15,7 +26,11 @@ export const Main = ({ user }: Props) => {
 
   function renderPage() {
     if (currentPage === "Browse") {
-      return <Browse />;
+      return (
+        <Suspense fallback={<h2>Page loadings</h2>}>
+          <Browse />
+        </Suspense>
+      );
     }
 
     if (currentPage === "Upload") {
@@ -23,7 +38,11 @@ export const Main = ({ user }: Props) => {
     }
 
     if (currentPage === "Your Posts") {
-      return <UserPosts />;
+      return (
+        <Suspense fallback={<h2>Page loadings</h2>}>
+          <UserPosts />
+        </Suspense>
+      );
     }
   }
 

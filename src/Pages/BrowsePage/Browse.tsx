@@ -14,7 +14,24 @@ interface PostData {
   questions: Array<{
     questionText: string;
     totalResponses: number;
-    answers?: object;
+    answers: {
+      0?: {
+        timesAnswered: number;
+        answerText: string;
+      };
+      1?: {
+        timesAnswered: number;
+        answerText: string;
+      };
+      2?: {
+        timesAnswered: number;
+        answerText: string;
+      };
+      3?: {
+        timesAnswered: number;
+        answerText: string;
+      };
+    };
   }>;
   postId: string;
   createdAt: string;
@@ -24,9 +41,6 @@ interface PostData {
 }
 
 const styles = makeStyles({
-  root: {
-    flexGrow: 1,
-  },
   leftPaper: {
     marginTop: "5px",
     marginLeft: "4px",
@@ -56,7 +70,7 @@ export const Browse: React.FC<Props> = () => {
 
   useEffect(() => {
     if (!posts) {
-      fetch("/posts")
+      fetch("/api/posts")
         .then((res) => res.json())
         .then((result) => {
           setPosts(result);
@@ -65,14 +79,16 @@ export const Browse: React.FC<Props> = () => {
     }
   });
 
-  return (
-    <div className={classes.root}>
-      {posts ? <PostCard post={posts[0]} /> : null}
-      {posts ? <PostCard post={posts[0]} /> : null}
-      {posts ? <PostCard post={posts[0]} /> : null}
-      {posts ? <PostCard post={posts[0]} /> : null}
-    </div>
-  );
+  const renderPosts = () => {
+    if (!posts) {
+      return <h1>Loading posts...</h1>;
+    }
+    return posts.map((post) => {
+      return <PostCard key={post.postId} post={post} />;
+    });
+  };
+
+  return <div>{renderPosts()}</div>;
 };
 
 /*
