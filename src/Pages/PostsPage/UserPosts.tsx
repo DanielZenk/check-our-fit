@@ -60,11 +60,9 @@ const styles = makeStyles({
 });
 
 export const UserPosts: React.FC<Props> = () => {
-  //cardId should change to a number if a card is selected
-  const [cardId, clickCard] = useState<string | undefined>(undefined);
-
   const classes = styles();
-
+  //cardId should change to a string if a card is selected
+  const [cardId, clickCard] = useState<string | undefined>(undefined);
   const [posts, setPosts] = useState<Array<PostData> | undefined>(undefined);
 
   const userObject = useContext(UserContext);

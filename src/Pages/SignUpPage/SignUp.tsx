@@ -1,4 +1,4 @@
-import React, { useState, createContext, useContext } from "react";
+import React, { useState, useContext } from "react";
 //material components
 import {
   TextField,
@@ -8,11 +8,9 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-//main page component
-import { Main } from "./MainPage/Main";
-import SignUp from "./SignUpPage/SignUp";
 //user context
-import { UserContext } from "../Context/UserContext";
+import { UserContext } from "../../Context/UserContext";
+import { Main } from "../MainPage/Main";
 
 const styles = makeStyles({
   root: {
@@ -33,64 +31,63 @@ const styles = makeStyles({
   },
 });
 
-function HomePage() {
-  const [login, setLogin] = useState(false);
-  const [signUp, toggleSignUp] = useState(false);
+function SignUp() {
+  const classes = styles();
+
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
+  const [user, setUser] = useState("");
+  const [confirmPass, setConfirmPass] = useState("");
+  const [signedUp, isSignedUp] = useState(false);
   const [passVis, togglePassVis] = useState(false);
-  const [userObj, setUserObj] = useState({
+  const [confirmPassVis, toggleConfirmPassVis] = useState(false);
+  const [contextValue, setContextValue] = useState({
     email: "",
     password: "",
     token: "",
   });
 
-  const attemptLogin = () => {
-    console.log(email);
-    console.log(pass);
-    const loginObj = {
+  const signUpNewUser = () => {
+    const signUpObj = {
       email,
       password: pass,
+      confirmPassword: confirmPass,
+      handle: user,
     };
-    fetch("/api/login", {
+    fetch("/api/signup", {
       method: "post",
-      body: JSON.stringify(loginObj),
+      body: JSON.stringify(signUpObj),
     })
       .then((res) => res.json())
       .then((res) => {
-        setUserObj({
+        setContextValue({
           email,
           password: pass,
           token: res.token,
         });
-        setLogin(true);
-      })
-      .catch((err) => {
-        console.log(err);
+        isSignedUp(true);
       });
   };
 
-  const renderPage = () => {
-    if (login) {
-      return (
-        <UserContext.Provider value={userObj}>
-          <Main user="daniel" />
-        </UserContext.Provider>
-      );
-    }
-    if (signUp) {
-      return <SignUp />;
-    }
+  const renderSignUpSheet = () => {
     return (
       <div>
-        <>
+        <div>
           <TextField
             onChange={(e) => setEmail(e.target.value)}
             variant="outlined"
             label="Email"
             className={classes.textField}
           />
-        </>
+        </div>
+        <div>
+          <TextField
+            onChange={(e) => setUser(e.target.value)}
+            variant="outlined"
+            label="Username"
+            className={classes.textField}
+          />
+        </div>
         <div>
           <TextField
             onChange={(e) => setPass(e.target.value)}
@@ -110,18 +107,28 @@ function HomePage() {
           />
         </div>
         <div>
-          <Button
-            onClick={() => attemptLogin()}
-            variant="contained"
-            color="primary"
-            className={classes.button}
-          >
-            Log In
-          </Button>
+          <TextField
+            onChange={(e) => setConfirmPass(e.target.value)}
+            variant="outlined"
+            label="Confirm Password"
+            className={classes.textField}
+            type={confirmPassVis ? "text" : "password"}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => toggleConfirmPassVis(!confirmPassVis)}
+                  >
+                    {confirmPassVis ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
         </div>
         <div>
           <Button
-            onClick={() => toggleSignUp(true)}
+            onClick={() => signUpNewUser()}
             variant="contained"
             color="primary"
             className={classes.button}
@@ -133,8 +140,17 @@ function HomePage() {
     );
   };
 
-  const classes = styles();
-  return <div className={classes.root}>{renderPage()}</div>;
+  return (
+    <div>
+      {signedUp ? (
+        <UserContext.Provider value={contextValue}>
+          <Main user="daniel" />
+        </UserContext.Provider>
+      ) : (
+        renderSignUpSheet()
+      )}
+    </div>
+  );
 }
 
-export default HomePage;
+export default SignUp;
