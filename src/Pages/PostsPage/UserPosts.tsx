@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 //material components
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -13,6 +13,8 @@ import {
 } from "@material-ui/core";
 //created components
 import { IndividualPost } from "./IndividualPost";
+//user context
+import { UserContext } from "../../Context/UserContext";
 
 interface Props {}
 
@@ -65,12 +67,13 @@ export const UserPosts: React.FC<Props> = () => {
 
   const [posts, setPosts] = useState<Array<PostData> | undefined>(undefined);
 
+  const userObject = useContext(UserContext);
+
   useEffect(() => {
     if (!posts) {
       fetch("/api/myPosts", {
         headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1YzlhZWJlMjM0ZGE2MDE2YmQ3Yjk0OTE2OGI4Y2Q1YjRlYzllZWIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZmFzaGlvbmFibGUtdHlwZXNjcmlwdCIsImF1ZCI6ImZhc2hpb25hYmxlLXR5cGVzY3JpcHQiLCJhdXRoX3RpbWUiOjE1OTAwOTM1NTAsInVzZXJfaWQiOiI5NDdZc1VPUHZKWTRSeW5GdzFlZkY0ZmY3SXExIiwic3ViIjoiOTQ3WXNVT1B2Slk0UnluRncxZWZGNGZmN0lxMSIsImlhdCI6MTU5MDA5MzU1MCwiZXhwIjoxNTkwMDk3MTUwLCJlbWFpbCI6InVzZXI0QGVtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJ1c2VyNEBlbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.XPmOybety_Sat6pkzjDsFZqhMkSwztqmXC3xCItUC3W_NxJJwoHfB9t-5ef1Lllio1Cek8p6J6MQOk7B8MBVOf_m9B6hEdHLoUIRah_DSKpPSlK1qu8cn0tyANP16RV0fukrKlCLgm5C27_3kXca_9ajQ-gcHZ2bw4dGMmKqz78h_KI3kFwqKq6yqLVzZJTueMywDg2MLr1YEVNePNhn1p-XPXAe4En09Z5nqMAkQpd0uH7QCtmy1PEMkNOALeX_e6tIttj0Mp8mk20-7FvB2B8TyxgYssZCwJ1eYBV2tZJUt9gwn5ukiglmDTru_CqS_EVeZDWkTMDG8Pss5z_dzg",
+          Authorization: `Bearer ${userObject.token}`,
         },
       })
         .then((res) => res.json())
