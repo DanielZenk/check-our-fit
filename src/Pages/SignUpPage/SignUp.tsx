@@ -31,6 +31,14 @@ const styles = makeStyles({
   },
 });
 
+interface errorObj {
+  email: string | undefined;
+  password: string | undefined;
+  confirmPassword: string | undefined;
+  general: string | undefined;
+  handle: string | undefined;
+}
+
 function SignUp() {
   const classes = styles();
 
@@ -46,6 +54,13 @@ function SignUp() {
     password: "",
     token: "",
   });
+  const [errors, setErrors] = useState<errorObj>({
+    email: undefined,
+    password: undefined,
+    confirmPassword: undefined,
+    general: undefined,
+    handle: undefined,
+  });
 
   const signUpNewUser = () => {
     const signUpObj = {
@@ -60,6 +75,16 @@ function SignUp() {
     })
       .then((res) => res.json())
       .then((res) => {
+        if (!res.token) {
+          setErrors({
+            email: res.email,
+            password: res.password,
+            confirmPassword: res.confirmPassword,
+            general: res.general,
+            handle: res.handle,
+          });
+          return;
+        }
         setContextValue({
           email,
           password: pass,
@@ -67,6 +92,38 @@ function SignUp() {
         });
         isSignedUp(true);
       });
+  };
+
+  const decideEmailError = () => {
+    if (errors.email) {
+      return errors.email;
+    }
+    if (errors.general) return errors.general;
+    return undefined;
+  };
+
+  const decideUserError = () => {
+    if (errors.handle && user.length === 0) {
+      return errors.handle;
+    }
+    if (errors.general) return errors.general;
+    return undefined;
+  };
+
+  const decidePasswordError = () => {
+    if (errors.password && pass.length === 0) {
+      return errors.password;
+    }
+    if (errors.general) return errors.general;
+    return undefined;
+  };
+
+  const decideConfirmPasswordError = () => {
+    if (errors.confirmPassword) {
+      return errors.confirmPassword;
+    }
+    if (errors.general) return errors.general;
+    return undefined;
   };
 
   const renderSignUpSheet = () => {
@@ -78,6 +135,8 @@ function SignUp() {
             variant="outlined"
             label="Email"
             className={classes.textField}
+            error={decideEmailError() ? true : false}
+            helperText={decideEmailError()}
           />
         </div>
         <div>
@@ -86,6 +145,8 @@ function SignUp() {
             variant="outlined"
             label="Username"
             className={classes.textField}
+            error={decideUserError() ? true : false}
+            helperText={decideUserError()}
           />
         </div>
         <div>
@@ -93,6 +154,8 @@ function SignUp() {
             onChange={(e) => setPass(e.target.value)}
             variant="outlined"
             label="Password"
+            error={decidePasswordError() ? true : false}
+            helperText={decidePasswordError()}
             className={classes.textField}
             type={passVis ? "text" : "password"}
             InputProps={{
@@ -112,6 +175,8 @@ function SignUp() {
             variant="outlined"
             label="Confirm Password"
             className={classes.textField}
+            error={decideConfirmPasswordError() ? true : false}
+            helperText={decideConfirmPasswordError()}
             type={confirmPassVis ? "text" : "password"}
             InputProps={{
               endAdornment: (
