@@ -33,6 +33,12 @@ const styles = makeStyles({
   },
 });
 
+interface errorObj {
+  email: string | undefined;
+  password: string | undefined;
+  general: string | undefined;
+}
+
 function HomePage() {
   const [login, setLogin] = useState(false);
   const [signUp, toggleSignUp] = useState(false);
@@ -43,6 +49,11 @@ function HomePage() {
     email: "",
     password: "",
     token: "",
+  });
+  const [errors, setErrors] = useState<errorObj>({
+    email: undefined,
+    password: undefined,
+    general: undefined,
   });
 
   const attemptLogin = () => {
@@ -58,6 +69,14 @@ function HomePage() {
     })
       .then((res) => res.json())
       .then((res) => {
+        if (!res.token) {
+          setErrors({
+            password: res.password,
+            email: res.email,
+            general: res.general,
+          });
+          return;
+        }
         setUserObj({
           email,
           password: pass,
@@ -70,11 +89,27 @@ function HomePage() {
       });
   };
 
+  const decideEmailError = () => {
+    if (errors.email && email.length === 0) {
+      return errors.email;
+    }
+    if (errors.general) return errors.general;
+    return undefined;
+  };
+
+  const decidePasswordError = () => {
+    if (errors.password && pass.length === 0) {
+      return errors.password;
+    }
+    if (errors.general) return errors.general;
+    return undefined;
+  };
+
   const renderPage = () => {
     if (login) {
       return (
         <UserContext.Provider value={userObj}>
-          <Main user="daniel" />
+          <Main />
         </UserContext.Provider>
       );
     }
@@ -89,11 +124,15 @@ function HomePage() {
             variant="outlined"
             label="Email"
             className={classes.textField}
+            helperText={decideEmailError()}
+            error={decideEmailError() ? true : false}
           />
         </>
         <div>
           <TextField
             onChange={(e) => setPass(e.target.value)}
+            error={decidePasswordError() ? true : false}
+            helperText={decidePasswordError()}
             variant="outlined"
             label="Password"
             className={classes.textField}

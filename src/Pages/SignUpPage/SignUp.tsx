@@ -144,7 +144,7 @@ function SignUp() {
     <div>
       {signedUp ? (
         <UserContext.Provider value={contextValue}>
-          <Main user="daniel" />
+          <Main />
         </UserContext.Provider>
       ) : (
         renderSignUpSheet()

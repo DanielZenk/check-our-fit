@@ -17,11 +17,7 @@ const UserPosts = React.lazy(() =>
   }))
 );
 
-interface Props {
-  user: string;
-}
-
-export const Main = ({ user }: Props) => {
+export const Main = () => {
   const [currentPage, changePage] = useState("Browse");
 
   function renderPage() {
