@@ -61,7 +61,45 @@ function SignUp() {
     handle: undefined,
   });
 
+  const isValidEmail = () => {
+    const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (email.match(emailRegEx)) return true;
+    else return false;
+  };
+
   const signUpNewUser = () => {
+    let tempErrors = {
+      email: "",
+      password: "",
+      confirmPassword: "",
+      handle: "",
+      general: undefined,
+    };
+    if (email.length === 0) {
+      tempErrors.email = "Must not be empty";
+    } else if (!isValidEmail()) {
+      tempErrors.email = "Must be a valid email";
+    }
+    if (pass.length === 0) {
+      tempErrors.password = "Must not be empty";
+    } else if (pass !== confirmPass) {
+      tempErrors.confirmPassword = "Passwords must match";
+    }
+    if (user.length === 0) {
+      tempErrors.handle = "Must not be empty";
+    }
+
+    if (
+      tempErrors.email.length > 0 ||
+      tempErrors.password.length > 0 ||
+      tempErrors.confirmPassword.length > 0 ||
+      tempErrors.handle.length > 0
+    ) {
+      setErrors(tempErrors);
+      return;
+    }
+
     const signUpObj = {
       email,
       password: pass,
