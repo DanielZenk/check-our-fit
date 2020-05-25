@@ -16,14 +16,6 @@ const styles = makeStyles({
 
 export const IndividualPost: React.FC<Props> = () => {
   const classes = styles();
-
-  // const data = [
-  //   { answers: 1, responses: 13000, label: 13000 },
-  //   { answers: 2, responses: 16500, label: 16500 },
-  //   { answers: 3, responses: 14250, label: 14250 },
-  //   { answers: 4, responses: 19000, label: 19000 },
-  // ];
-
   const data = [
     {
       question: "what are animals",

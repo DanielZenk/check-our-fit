@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 //material components
 import {
   TextField,
@@ -18,7 +18,6 @@ const styles = makeStyles({
   },
   textField: {
     marginTop: "10px",
-    // backgroundColor: "#9b0a0a",
     color: "white",
     width: "250px",
   },

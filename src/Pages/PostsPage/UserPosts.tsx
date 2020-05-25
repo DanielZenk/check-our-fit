@@ -83,8 +83,8 @@ export const UserPosts: React.FC<Props> = () => {
   });
 
   //() => clickCard(id)
-  const renderCard = (id: PostData) => {
-    const newDate = new Date(id.createdAt);
+  const renderCard = (post: PostData) => {
+    const newDate = new Date(post.createdAt);
     return (
       <Grid item xs={12} sm={4} md={3}>
         <Card className={classes.card}>
@@ -102,7 +102,7 @@ export const UserPosts: React.FC<Props> = () => {
                 Created on {newDate.toLocaleDateString()}
               </Typography>
               <Typography variant="body2" color="textSecondary" component="p">
-                {id.totalResponses} responses.
+                {post.totalResponses} responses.
               </Typography>
             </CardContent>
           </CardActionArea>
@@ -110,7 +110,7 @@ export const UserPosts: React.FC<Props> = () => {
             <Button
               size="small"
               color="primary"
-              onClick={() => clickCard(id.postId)}
+              onClick={() => clickCard(post.postId)}
             >
               View Responses
             </Button>

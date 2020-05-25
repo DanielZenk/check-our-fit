@@ -118,12 +118,6 @@ export const Questionnaire: React.FC<Props> = ({ questions, postId }) => {
       .then((result) => {
         console.log(result);
       });
-    // const test = "posts";
-    // fetch(`/api/${test}`)
-    //   .then((res) => res.json())
-    //   .then((result) => {
-    //     console.log(result);
-    //   });
   };
 
   return (
