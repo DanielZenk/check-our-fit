@@ -56,9 +56,28 @@ function HomePage() {
     general: undefined,
   });
 
+  const isValidEmail = () => {
+    const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (email.match(emailRegEx)) return true;
+    else return false;
+  };
+
   const attemptLogin = () => {
-    console.log(email);
-    console.log(pass);
+    let tempErrors = { email: "", password: "", general: "" };
+    if (email.length === 0) {
+      tempErrors.email = "Must not be empty";
+    } else if (!isValidEmail()) {
+      tempErrors.email = "Must be a valid email";
+    }
+    if (pass.length === 0) {
+      tempErrors.password = "Must not be empty";
+    }
+    if (tempErrors.email.length > 0 || tempErrors.password.length > 0) {
+      setErrors(tempErrors);
+      return;
+    }
+
     const loginObj = {
       email,
       password: pass,
@@ -90,7 +109,7 @@ function HomePage() {
   };
 
   const decideEmailError = () => {
-    if (errors.email && email.length === 0) {
+    if (errors.email) {
       return errors.email;
     }
     if (errors.general) return errors.general;
