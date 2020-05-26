@@ -2,13 +2,17 @@ import React, { useState } from "react";
 //material components
 import {
   AppBar,
+  Toolbar,
   IconButton,
   Drawer,
   List,
   ListItem,
   ListItemText,
+  Fab,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
+import AddIcon from "@material-ui/icons/Add";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { makeStyles } from "@material-ui/core/styles";
 
 interface Props {
@@ -24,36 +28,52 @@ const styles = makeStyles({
     color: "white",
     textAlign: "center",
     width: "100%",
+    top: "auto",
+    bottom: 0,
   },
-  menuButton: {
-    marginRight: "2px",
-    marginLeft: "5px",
-    width: "35px",
+  fabButton: {
+    position: "absolute",
+    zIndex: 1,
+    top: -30,
+    left: 0,
+    right: 0,
+    margin: "0 auto",
+  },
+  grow: {
+    flexGrow: 1,
   },
 });
 
-export const TopBar: React.FC<Props> = ({ changePage }) => {
+export const BottomBar: React.FC<Props> = ({ changePage }) => {
   const [drawerOpen, toggleDrawer] = useState(false);
 
   const classes = styles();
 
-  function listItemClicked(newPage: string) {
+  const listItemClicked = (newPage: string) => {
     changePage(newPage);
     toggleDrawer(false);
-  }
+  };
 
   return (
     <div>
-      <AppBar position="static" className={classes.appbar}>
-        <IconButton
-          edge="start"
-          className={classes.menuButton}
-          color="inherit"
-          aria-label="menu"
-          onClick={() => toggleDrawer(true)}
-        >
-          <MenuIcon />
-        </IconButton>
+      <AppBar position="fixed" className={classes.appbar}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={() => toggleDrawer(true)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Fab aria-label="add" className={classes.fabButton}>
+            <AddIcon />
+          </Fab>
+          <div className={classes.grow} />
+          <IconButton edge="end" color="inherit">
+            <AccountCircleIcon />
+          </IconButton>
+        </Toolbar>
       </AppBar>
       <div>
         <Drawer open={drawerOpen} onClose={() => toggleDrawer(false)}>

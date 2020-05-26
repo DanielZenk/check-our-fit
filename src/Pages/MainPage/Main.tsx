@@ -5,9 +5,9 @@ import { Browse } from "../BrowsePage/Browse";
 
 //lazy load created components
 
-const TopBar = React.lazy(() =>
-  import("../../Components/TopBar").then(({ TopBar }) => ({
-    default: TopBar,
+const BottomBar = React.lazy(() =>
+  import("../../Components/BottomBar").then(({ BottomBar }) => ({
+    default: BottomBar,
   }))
 );
 
@@ -17,20 +17,26 @@ const UserPosts = React.lazy(() =>
   }))
 );
 
+const Upload = React.lazy(() =>
+  import("../UploadPage/Upload").then(({ Upload }) => ({
+    default: Upload,
+  }))
+);
+
 export const Main = () => {
   const [currentPage, changePage] = useState("Browse");
 
   function renderPage() {
     if (currentPage === "Browse") {
-      return (
-        <Suspense fallback={<h2>Page loadings</h2>}>
-          <Browse />
-        </Suspense>
-      );
+      return <Browse />;
     }
 
     if (currentPage === "Upload") {
-      return <div>upload</div>;
+      return (
+        <Suspense fallback={<h2>Page loadings</h2>}>
+          <Upload />
+        </Suspense>
+      );
     }
 
     if (currentPage === "Your Posts") {
@@ -44,7 +50,7 @@ export const Main = () => {
 
   return (
     <div>
-      <TopBar changePage={(page) => changePage(page)} />
+      <BottomBar changePage={(page) => changePage(page)} />
       {renderPage()}
     </div>
   );
