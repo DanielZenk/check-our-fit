@@ -1,25 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 //material components
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
-  Fab,
-} from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
+import { AppBar, Toolbar, IconButton, Fab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import HomeIcon from "@material-ui/icons/Home";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { Link } from "react-router-dom";
-
-interface Props {
-  changePage: (page: string) => void;
-}
 
 const styles = makeStyles({
   root: {
@@ -46,28 +33,18 @@ const styles = makeStyles({
   },
 });
 
-export const BottomBar: React.FC<Props> = ({ changePage }) => {
-  const [drawerOpen, toggleDrawer] = useState(false);
-
+export const BottomBar: React.FC = () => {
   const classes = styles();
-
-  const listItemClicked = (newPage: string) => {
-    changePage(newPage);
-    toggleDrawer(false);
-  };
 
   return (
     <div>
       <AppBar position="fixed" className={classes.appbar}>
         <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={() => toggleDrawer(true)}
-          >
-            <MenuIcon />
-          </IconButton>
+          <Link to="/">
+            <IconButton edge="start" color="inherit" aria-label="menu">
+              <HomeIcon />
+            </IconButton>
+          </Link>
           <Link to="/Upload">
             <Fab aria-label="add" className={classes.fabButton}>
               <AddIcon />
@@ -75,31 +52,12 @@ export const BottomBar: React.FC<Props> = ({ changePage }) => {
           </Link>
           <div className={classes.grow} />
           <Link to="/UserPosts">
-            <IconButton
-              edge="end"
-              color="inherit"
-              onClick={() => changePage("Your Posts")}
-            >
+            <IconButton edge="end" color="inherit">
               <AccountCircleIcon />
             </IconButton>
           </Link>
         </Toolbar>
       </AppBar>
-      <div>
-        <Drawer open={drawerOpen} onClose={() => toggleDrawer(false)}>
-          <List className={classes.root}>
-            <ListItem button onClick={() => listItemClicked("Browse")}>
-              <ListItemText primary={"Browse"} />
-            </ListItem>
-            <ListItem button onClick={() => listItemClicked("Upload")}>
-              <ListItemText primary={"Upload"} />
-            </ListItem>
-            <ListItem button onClick={() => listItemClicked("Your Posts")}>
-              <ListItemText primary={"Your Posts"} />
-            </ListItem>
-          </List>
-        </Drawer>
-      </div>
     </div>
   );
 };
