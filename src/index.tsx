@@ -1,16 +1,15 @@
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import HomePage from "./Pages/HomePage";
-import { Main } from "./Pages/MainPage/Main";
-import { Upload } from "./Pages/UploadPage/Upload";
 import * as serviceWorker from "./serviceWorker";
 
 //should render homepage but this skips the login
 ReactDOM.render(
   <React.StrictMode>
-    <Suspense fallback={<h1>Page loadings</h1>}>
-      <Main />
-    </Suspense>
+    <Router>
+      <HomePage />
+    </Router>
   </React.StrictMode>,
   document.getElementById("root")
 );

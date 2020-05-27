@@ -1,35 +1,22 @@
 import React, { useState } from "react";
 //material components
-import {
-  TextField,
-  Button,
-  InputAdornment,
-  IconButton,
-} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
+//react router components
+import { Switch, Route, Redirect } from "react-router-dom";
 //main page component
-import { Main } from "./MainPage/Main";
 import SignUp from "./SignUpPage/SignUp";
+import { Browse } from "./BrowsePage/Browse";
+import { Upload } from "./UploadPage/Upload";
+import { UserPosts } from "./PostsPage/UserPosts";
+import { Login } from "./LoginPage/Login";
 //user context
 import { UserContext } from "../Context/UserContext";
+//routes
+import { BottomBar } from "../Components/BottomBar";
 
 const styles = makeStyles({
   root: {
     textAlign: "center",
-  },
-  textField: {
-    marginTop: "10px",
-    // backgroundColor: "#9b0a0a",
-    color: "white",
-    width: "250px",
-  },
-  button: {
-    marginTop: "10px",
-    backgroundColor: "#9b0a0a",
-    color: "white",
-    width: "250px",
-    borderRadius: "10px",
   },
 });
 
@@ -40,159 +27,55 @@ interface errorObj {
 }
 
 function HomePage() {
-  const [login, setLogin] = useState(false);
-  const [signUp, toggleSignUp] = useState(false);
-  const [email, setEmail] = useState("");
-  const [pass, setPass] = useState("");
-  const [passVis, togglePassVis] = useState(false);
   const [userObj, setUserObj] = useState({
     email: "",
     password: "",
     token: "",
   });
-  const [errors, setErrors] = useState<errorObj>({
-    email: undefined,
-    password: undefined,
-    general: undefined,
-  });
-
-  const isValidEmail = () => {
-    const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-    if (email.match(emailRegEx)) return true;
-    else return false;
-  };
-
-  const attemptLogin = () => {
-    let tempErrors = { email: "", password: "", general: "" };
-    if (email.length === 0) {
-      tempErrors.email = "Must not be empty";
-    } else if (!isValidEmail()) {
-      tempErrors.email = "Must be a valid email";
-    }
-    if (pass.length === 0) {
-      tempErrors.password = "Must not be empty";
-    }
-    if (tempErrors.email.length > 0 || tempErrors.password.length > 0) {
-      setErrors(tempErrors);
-      return;
-    }
-
-    const loginObj = {
-      email,
-      password: pass,
-    };
-    fetch("/api/login", {
-      method: "post",
-      body: JSON.stringify(loginObj),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (!res.token) {
-          setErrors({
-            password: res.password,
-            email: res.email,
-            general: res.general,
-          });
-          return;
-        }
-        setUserObj({
-          email,
-          password: pass,
-          token: res.token,
-        });
-        setLogin(true);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const decideEmailError = () => {
-    if (errors.email) {
-      return errors.email;
-    }
-    if (errors.general) return errors.general;
-    return undefined;
-  };
-
-  const decidePasswordError = () => {
-    if (errors.password && pass.length === 0) {
-      return errors.password;
-    }
-    if (errors.general) return errors.general;
-    return undefined;
-  };
-
-  const renderPage = () => {
-    if (login) {
-      return (
-        <UserContext.Provider value={userObj}>
-          <Main />
-        </UserContext.Provider>
-      );
-    }
-    if (signUp) {
-      return <SignUp />;
-    }
-    return (
-      <div>
-        <>
-          <TextField
-            onChange={(e) => setEmail(e.target.value)}
-            variant="outlined"
-            label="Email"
-            className={classes.textField}
-            helperText={decideEmailError()}
-            error={decideEmailError() ? true : false}
-          />
-        </>
-        <div>
-          <TextField
-            onChange={(e) => setPass(e.target.value)}
-            error={decidePasswordError() ? true : false}
-            helperText={decidePasswordError()}
-            variant="outlined"
-            label="Password"
-            className={classes.textField}
-            type={passVis ? "text" : "password"}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={() => togglePassVis(!passVis)}>
-                    {passVis ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-        </div>
-        <div>
-          <Button
-            onClick={() => attemptLogin()}
-            variant="contained"
-            color="primary"
-            className={classes.button}
-          >
-            Log In
-          </Button>
-        </div>
-        <div>
-          <Button
-            onClick={() => toggleSignUp(true)}
-            variant="contained"
-            color="primary"
-            className={classes.button}
-          >
-            Sign Up
-          </Button>
-        </div>
-      </div>
-    );
-  };
 
   const classes = styles();
-  return <div className={classes.root}>{renderPage()}</div>;
+
+  return (
+    <div className={classes.root}>
+      <UserContext.Provider value={userObj}>
+        <Switch>
+          <Route exact path="/login">
+            <Login onSuccessfulLogin={(e) => setUserObj(e)} />
+          </Route>
+          <Route exact path="/">
+            <Browse />
+          </Route>
+          <Route
+            path="/Upload"
+            render={({ location }) =>
+              userObj.token.length > 0 ? (
+                <Upload />
+              ) : (
+                <Redirect
+                  to={{ pathname: "/login", state: { from: location } }}
+                />
+              )
+            }
+          ></Route>
+          <Route
+            exact
+            path="/UserPosts"
+            render={({ location }) =>
+              userObj.token.length > 0 ? (
+                <UserPosts />
+              ) : (
+                <Redirect
+                  to={{ pathname: "/login", state: { from: location } }}
+                />
+              )
+            }
+          />
+        </Switch>
+
+        <BottomBar changePage={(e) => console.log(e)} />
+      </UserContext.Provider>
+    </div>
+  );
 }
 
 export default HomePage;

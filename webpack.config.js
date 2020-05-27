@@ -29,6 +29,7 @@ module.exports = {
   },
   devServer: {
     publicPath: "/",
+    historyApiFallback: true,
     hot: true,
     proxy: {
       "/api": {

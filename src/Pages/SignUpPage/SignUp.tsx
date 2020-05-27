@@ -10,7 +10,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 //user context
 import { UserContext } from "../../Context/UserContext";
-import { Main } from "../MainPage/Main";
 
 const styles = makeStyles({
   root: {
@@ -245,9 +244,7 @@ function SignUp() {
   return (
     <div>
       {signedUp ? (
-        <UserContext.Provider value={contextValue}>
-          <Main />
-        </UserContext.Provider>
+        <UserContext.Provider value={contextValue}></UserContext.Provider>
       ) : (
         renderSignUpSheet()
       )}

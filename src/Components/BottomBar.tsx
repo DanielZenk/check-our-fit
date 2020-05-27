@@ -15,6 +15,8 @@ import AddIcon from "@material-ui/icons/Add";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { makeStyles } from "@material-ui/core/styles";
 
+import { Link } from "react-router-dom";
+
 interface Props {
   changePage: (page: string) => void;
 }
@@ -66,13 +68,21 @@ export const BottomBar: React.FC<Props> = ({ changePage }) => {
           >
             <MenuIcon />
           </IconButton>
-          <Fab aria-label="add" className={classes.fabButton}>
-            <AddIcon />
-          </Fab>
+          <Link to="/Upload">
+            <Fab aria-label="add" className={classes.fabButton}>
+              <AddIcon />
+            </Fab>
+          </Link>
           <div className={classes.grow} />
-          <IconButton edge="end" color="inherit">
-            <AccountCircleIcon />
-          </IconButton>
+          <Link to="/UserPosts">
+            <IconButton
+              edge="end"
+              color="inherit"
+              onClick={() => changePage("Your Posts")}
+            >
+              <AccountCircleIcon />
+            </IconButton>
+          </Link>
         </Toolbar>
       </AppBar>
       <div>

@@ -51,8 +51,9 @@ interface PostData {
 const styles = makeStyles({
   card: {
     //maxWidth: "20%",
-    marginLeft: "10px",
-    marginTop: "10px",
+    width: "95%",
+    margin: "auto",
+    marginTop: "5px",
   },
   media: {
     height: 140,
