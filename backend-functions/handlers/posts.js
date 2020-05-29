@@ -17,24 +17,6 @@ exports.getAllPosts = (req, res) => {
     .catch((err) => console.error(err));
 };
 
-exports.getNotMyPosts = (req, res) => {
-  db.collection("posts")
-    .where("handle", "!=", req.user.handle)
-    .orderBy("createdAt", "desc")
-    .get()
-    .then((data) => {
-      let posts = [];
-      data.forEach((doc) => {
-        posts.push({
-          postId: doc.id,
-          ...doc.data(),
-        });
-      });
-      return res.json(posts);
-    })
-    .catch((err) => console.error(err));
-};
-
 exports.getMyPosts = (req, res) => {
   db.collection("posts")
     .where("handle", "==", req.user.handle)
@@ -67,7 +49,7 @@ exports.createPost = (req, res) => {
 
   const questions = req.body.questions;
   questions.forEach((question) => {
-    newQuestion = {};
+    const newQuestion = {};
     newQuestion.questionText = question.questionText;
     newQuestion.answers = {};
     question.answers.forEach((answer, index) => {
@@ -82,7 +64,7 @@ exports.createPost = (req, res) => {
   db.collection("posts")
     .add(newPost)
     .then((doc) => {
-      postId = doc.id;
+      const postId = doc.id;
       return res.json({ message: `Post ${doc.id} created successfully`, postId });
     })
     .catch((err) => {
