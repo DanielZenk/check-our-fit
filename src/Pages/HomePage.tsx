@@ -70,9 +70,12 @@ function HomePage() {
               )
             }
           />
+          <Route exact path="/SignUp">
+            <SignUp />
+          </Route>
         </Switch>
 
-        <BottomBar changePage={(e) => console.log(e)} />
+        <BottomBar />
       </UserContext.Provider>
     </div>
   );

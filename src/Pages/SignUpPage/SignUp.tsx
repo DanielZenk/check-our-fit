@@ -5,11 +5,14 @@ import {
   Button,
   InputAdornment,
   IconButton,
+  Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 //user context
 import { UserContext } from "../../Context/UserContext";
+//router
+import { Link } from "react-router-dom";
 
 const styles = makeStyles({
   root: {
@@ -26,6 +29,9 @@ const styles = makeStyles({
     color: "white",
     width: "250px",
     borderRadius: "10px",
+  },
+  typography: {
+    marginTop: "10px",
   },
 });
 
@@ -236,6 +242,20 @@ function SignUp() {
           >
             Sign Up
           </Button>
+        </div>
+        <div>
+          <Typography className={classes.typography} variant="h6">
+            Already have an account? Log in!
+          </Typography>
+          <Link to="/login">
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+            >
+              Log In
+            </Button>
+          </Link>
         </div>
       </div>
     );

@@ -11,6 +11,8 @@ import { Visibility, VisibilityOff } from "@material-ui/icons";
 //react router components
 import { useHistory, useLocation } from "react-router-dom";
 
+import { Link } from "react-router-dom";
+
 const styles = makeStyles({
   root: {
     textAlign: "center",
@@ -46,7 +48,6 @@ interface Props {
 }
 
 export const Login: React.FC<Props> = ({ onSuccessfulLogin }) => {
-  const [signUp, toggleSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [passVis, togglePassVis] = useState(false);
@@ -169,14 +170,15 @@ export const Login: React.FC<Props> = ({ onSuccessfulLogin }) => {
           </Button>
         </div>
         <div>
-          <Button
-            onClick={() => toggleSignUp(true)}
-            variant="contained"
-            color="primary"
-            className={classes.button}
-          >
-            Sign Up
-          </Button>
+          <Link to="/SignUp">
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+            >
+              Sign Up
+            </Button>
+          </Link>
         </div>
       </div>
     );
