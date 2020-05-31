@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 //material components
 import { makeStyles } from "@material-ui/core/styles";
-//created components
-import { PostCard } from "../../Components/PostCard";
 import {
   Typography,
   Button,
   List,
   ListItem,
   ListItemText,
+  Input,
 } from "@material-ui/core";
+//created components
+import { PostCard } from "../../Components/PostCard";
+import { ImageCarousel } from "../../Components/ImageCarousel";
 
 interface Props {}
 
@@ -53,10 +55,18 @@ const styles = makeStyles({
   },
 });
 
+interface fileObject {
+  target: {
+    files: Array<object>;
+  };
+}
+
 export const Upload: React.FC<Props> = () => {
   const [post, setPost] = useState<Array<PostData> | undefined>(undefined);
 
-  const [images, addImage] = useState(0);
+  const [images, setImages] = useState<Array<string> | undefined>(undefined);
+
+  const [image, setImage] = useState<any>(null);
 
   const premadeQuestions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -87,19 +97,43 @@ export const Upload: React.FC<Props> = () => {
     );
   };
 
+  const handleEditPicture = () => {
+    const fileInput = document.getElementById("image-upload");
+    if (fileInput) fileInput.click();
+    else return;
+  };
+
+  const handleImageChange = (event: any) => {
+    console.log(event.target.files);
+    let tempArr: Array<string> = [];
+    Object.values(event.target.files).forEach((image: any) => {
+      tempArr.push(URL.createObjectURL(image));
+    });
+    console.log(tempArr);
+    setImages(tempArr);
+  };
+
   return (
     <div className={classes.root}>
       <>
         <Typography className={classes.header}>
           First, add some images!
         </Typography>
+
+        <input
+          hidden
+          multiple
+          type="file"
+          id="image-upload"
+          onChange={(e) => handleImageChange(e)}
+        />
       </>
       <>
-        <Button color="primary" onClick={() => addImage(images + 1)}>
+        <Button color="primary" onClick={handleEditPicture}>
           Add Image
         </Button>
       </>
-      {images > 0 ? renderQuestionForm() : null}
+      <div>{images ? <ImageCarousel images={images} /> : null}</div>
     </div>
   );
 };
