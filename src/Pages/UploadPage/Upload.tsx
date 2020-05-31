@@ -109,7 +109,6 @@ export const Upload: React.FC<Props> = () => {
     Object.values(event.target.files).forEach((image: any) => {
       tempArr.push(URL.createObjectURL(image));
     });
-    console.log(tempArr);
     setImages(tempArr);
   };
 
