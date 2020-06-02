@@ -8,6 +8,7 @@ import {
   ListItem,
   ListItemText,
   Input,
+  Fab,
 } from "@material-ui/core";
 //created components
 import { PostCard } from "../../Components/PostCard";
@@ -53,6 +54,11 @@ const styles = makeStyles({
     overflow: "auto",
     marginTop: "10px",
   },
+  carousel: {
+    maxWidth: "300px",
+    nargin: "auto",
+    maxHeight: "400px",
+  },
 });
 
 interface fileObject {
@@ -93,6 +99,7 @@ export const Upload: React.FC<Props> = () => {
         <Typography className={classes.header}>
           Or you can come up with your own.
         </Typography>
+        <Fab variant="extended">Add question</Fab>
       </>
     );
   };
@@ -132,7 +139,16 @@ export const Upload: React.FC<Props> = () => {
           Add Image
         </Button>
       </>
-      <div>{images ? <ImageCarousel images={images} /> : null}</div>
+      <div>
+        {images ? (
+          <>
+            <div className={classes.carousel}>
+              <ImageCarousel images={images} />
+            </div>
+            <div>{renderQuestionForm()}</div>
+          </>
+        ) : null}
+      </div>
     </div>
   );
 };
