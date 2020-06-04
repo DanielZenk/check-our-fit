@@ -3,12 +3,13 @@ import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 import HomePage from "./Pages/HomePage";
 import * as serviceWorker from "./serviceWorker";
+import { Upload } from "./Pages/UploadPage/Upload";
 
 //should render homepage but this skips the login
 ReactDOM.render(
   <React.StrictMode>
     <Router>
-      <HomePage />
+      <Upload />
     </Router>
   </React.StrictMode>,
   document.getElementById("root")

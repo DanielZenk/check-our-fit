@@ -14,6 +14,8 @@ import {
 import { PostCard } from "../../Components/PostCard";
 import { ImageCarousel } from "../../Components/ImageCarousel";
 
+import { ImageCarouselV2 } from "../../Components/ImageCarouselV2";
+
 interface Props {}
 
 interface PostData {
@@ -56,8 +58,11 @@ const styles = makeStyles({
   },
   carousel: {
     maxWidth: "300px",
-    nargin: "auto",
-    maxHeight: "400px",
+    margin: "auto",
+    maxHeight: "600px",
+  },
+  questionForm: {
+    marginTop: "40px",
   },
 });
 
@@ -71,8 +76,6 @@ export const Upload: React.FC<Props> = () => {
   const [post, setPost] = useState<Array<PostData> | undefined>(undefined);
 
   const [images, setImages] = useState<Array<string> | undefined>(undefined);
-
-  const [image, setImage] = useState<any>(null);
 
   const premadeQuestions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -132,6 +135,7 @@ export const Upload: React.FC<Props> = () => {
           type="file"
           id="image-upload"
           onChange={(e) => handleImageChange(e)}
+          accept="image/*"
         />
       </>
       <>
@@ -143,9 +147,9 @@ export const Upload: React.FC<Props> = () => {
         {images ? (
           <>
             <div className={classes.carousel}>
-              <ImageCarousel images={images} />
+              <ImageCarouselV2 images={images} />
             </div>
-            <div>{renderQuestionForm()}</div>
+            <div className={classes.questionForm}>{renderQuestionForm()}</div>
           </>
         ) : null}
       </div>
