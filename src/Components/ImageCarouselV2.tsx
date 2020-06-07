@@ -24,17 +24,7 @@ export const ImageCarouselV2: React.FC<Props> = ({ images }) => {
 
   const renderImages = () => {
     return images.map((imgSrc, index) => {
-      return (
-        <div>
-          <img
-            alt="Meaningful text"
-            src={imgSrc}
-            ref={(image) =>
-              console.log(image?.offsetHeight, image?.offsetWidth)
-            }
-          />
-        </div>
-      );
+      return <div data-src={imgSrc}></div>;
     });
   };
 
