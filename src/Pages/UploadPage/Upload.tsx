@@ -7,9 +7,13 @@ import {
   List,
   ListItem,
   ListItemText,
-  Input,
   Fab,
+  ListItemSecondaryAction,
+  Checkbox,
 } from "@material-ui/core";
+//carousel components
+import AwesomeSlider from "react-awesome-slider";
+import "react-awesome-slider/dist/styles.css";
 //created components
 import { PostCard } from "../../Components/PostCard";
 import { ImageCarousel } from "../../Components/ImageCarousel";
@@ -50,7 +54,6 @@ const styles = makeStyles({
     marginTop: "10px",
   },
   list: {
-    maxHeight: "300px",
     width: "95%",
     margin: "auto",
     overflow: "auto",
@@ -64,6 +67,18 @@ const styles = makeStyles({
   questionForm: {
     marginTop: "40px",
   },
+  carouselItem: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#fff",
+    margin: "auto",
+    overflow: "auto",
+  },
+  carouselContent: {
+    textAlign: "center",
+    width: "95%",
+    margin: "auto",
+  },
 });
 
 interface fileObject {
@@ -75,6 +90,10 @@ interface fileObject {
 export const Upload: React.FC<Props> = () => {
   const [post, setPost] = useState<Array<PostData> | undefined>(undefined);
 
+  const [currPage, setPage] = useState(0);
+
+  const [numQuestions, addQuestion] = useState(0);
+
   const [images, setImages] = useState<Array<string> | undefined>(undefined);
 
   const premadeQuestions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -85,24 +104,15 @@ export const Upload: React.FC<Props> = () => {
     return (
       <>
         <Typography className={classes.header}>
-          Awesome! Let's work on some questions you want to ask the community.
+          You can make {4 - numQuestions} more questions.
         </Typography>
-        <Typography className={classes.header}>
-          You can find some premade questions here:
-        </Typography>
-        <List className={classes.list}>
-          {premadeQuestions.map((id) => {
-            return (
-              <ListItem button key={id}>
-                <ListItemText primary={`Premade question ${id}`} />
-              </ListItem>
-            );
-          })}
-        </List>
-        <Typography className={classes.header}>
-          Or you can come up with your own.
-        </Typography>
-        <Fab variant="extended">Add question</Fab>
+        <Fab
+          disabled={numQuestions >= 4}
+          variant="extended"
+          onClick={() => addQuestion(numQuestions + 1)}
+        >
+          Add question
+        </Fab>
       </>
     );
   };
@@ -123,36 +133,86 @@ export const Upload: React.FC<Props> = () => {
   };
 
   return (
-    <div className={classes.root}>
-      <>
-        <Typography className={classes.header}>
-          First, add some images!
-        </Typography>
+    <div>
+      <AwesomeSlider
+        fillParent
+        mobileTouch={false}
+        bullets={false}
+        buttons={false}
+        selected={currPage}
+      >
+        <div className={classes.carouselItem}>
+          <div className={classes.carouselContent}>
+            <Typography className={classes.header}>
+              First, add some images!
+            </Typography>
 
-        <input
-          hidden
-          multiple
-          type="file"
-          id="image-upload"
-          onChange={(e) => handleImageChange(e)}
-          accept="image/*"
-        />
-      </>
-      <>
-        <Button color="primary" onClick={handleEditPicture}>
-          Add Image
-        </Button>
-      </>
-      <div>
-        {images ? (
-          <>
+            <input
+              hidden
+              multiple
+              type="file"
+              id="image-upload"
+              onChange={(e) => handleImageChange(e)}
+              accept="image/*"
+            />
+            <>
+              <Button color="primary" onClick={handleEditPicture}>
+                Add Image
+              </Button>
+            </>
+
             <div className={classes.carousel}>
-              <ImageCarouselV2 images={images} />
+              {images ? (
+                <>
+                  <ImageCarousel images={images} />
+                  <Fab
+                    disabled={numQuestions >= 4}
+                    variant="extended"
+                    onClick={() => setPage(1)}
+                  >
+                    Lets look at questions!
+                  </Fab>
+                </>
+              ) : null}
             </div>
+          </div>
+        </div>
+        <div className={classes.carouselItem}>
+          <div className={classes.carouselContent}>
+            <Typography className={classes.header}>
+              You can find some premade questions here:
+            </Typography>
+            <List className={classes.list}>
+              {premadeQuestions.map((id) => {
+                return (
+                  <ListItem button key={id}>
+                    <ListItemText primary={`Premade question ${id}`} />
+                    <ListItemSecondaryAction>
+                      <Checkbox></Checkbox>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                );
+              })}
+            </List>
+            <Typography className={classes.header}>
+              Or you can come up with your own.
+            </Typography>
+
+            <Fab
+              disabled={numQuestions >= 4}
+              variant="extended"
+              onClick={() => setPage(2)}
+            >
+              Create my own
+            </Fab>
+          </div>
+        </div>
+        <div className={classes.carouselItem}>
+          <div className={classes.carouselContent}>
             <div className={classes.questionForm}>{renderQuestionForm()}</div>
-          </>
-        ) : null}
-      </div>
+          </div>
+        </div>
+      </AwesomeSlider>
     </div>
   );
 };
