@@ -20,7 +20,6 @@ import {
 } from "@material-ui/core";
 
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 //carousel components
 import AwesomeSlider from "react-awesome-slider";
@@ -30,6 +29,8 @@ import { PostCard } from "../../Components/PostCard";
 import { ImageCarousel } from "../../Components/ImageCarousel";
 
 import { ImageCarouselV2 } from "../../Components/ImageCarouselV2";
+
+import { QuestionCreation } from "../../Components/QuestionCreation";
 
 interface Props {}
 
@@ -134,59 +135,7 @@ export const Upload: React.FC<Props> = () => {
     question: QuestionFormat,
     index: number
   ) => {
-    return (
-      <Card raised className={classes.card}>
-        <CardHeader title={`Question ${index + 1}`} />
-        <CardActions disableSpacing>
-          <IconButton
-            onClick={() => {
-              var temp = openCards;
-              temp[index] = !temp[index];
-              setOpenCards(temp);
-            }}
-          >
-            {openCards[index] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-          </IconButton>
-        </CardActions>
-        <Collapse in={openCards[index]}>
-          <>
-            <TextField
-              className={classes.textField}
-              variant="outlined"
-              multiline
-              rows={3}
-              label={`Question`}
-              fullWidth
-            />
-          </>
-          {question.answers.map((answer, index) => {
-            return (
-              <>
-                <TextField
-                  className={classes.textField}
-                  variant="outlined"
-                  label={`Answer ${index + 1}`}
-                  fullWidth
-                />
-              </>
-            );
-          })}
-          <>
-            <Button
-              onClick={() => {
-                var tempAnswers = question.answers;
-                tempAnswers.push("");
-                var tempQuestions = questions;
-                tempQuestions[index].answers = tempAnswers;
-                modifyQuestions(tempQuestions);
-              }}
-            >
-              Add Answer Option
-            </Button>
-          </>
-        </Collapse>
-      </Card>
-    );
+    return <QuestionCreation index={index} />;
   };
 
   const renderQuestionForm = () => {
