@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 //material components
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -10,13 +10,6 @@ import {
   Fab,
   ListItemSecondaryAction,
   Checkbox,
-  TextField,
-  Card,
-  CardHeader,
-  CardContent,
-  CardActions,
-  Collapse,
-  IconButton,
 } from "@material-ui/core";
 
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -99,13 +92,6 @@ const styles = makeStyles({
   fab: {
     marginBottom: "5px",
   },
-  questionContainer: {},
-  textField: {
-    marginBottom: "5px",
-  },
-  card: {
-    marginTop: "10px",
-  },
 });
 
 interface fileObject {
@@ -124,8 +110,6 @@ export const Upload: React.FC<Props> = () => {
   const [questions, modifyQuestions] = useState<Array<QuestionFormat>>([]);
 
   const [images, setImages] = useState<Array<string> | undefined>(undefined);
-
-  const [openCards, setOpenCards] = useState([false, false, false, false]);
 
   const premadeQuestions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 

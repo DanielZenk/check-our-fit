@@ -2,14 +2,7 @@ import React, { useState } from "react";
 //material components
 import { makeStyles } from "@material-ui/core/styles";
 import {
-  Typography,
   Button,
-  List,
-  ListItem,
-  ListItemText,
-  Fab,
-  ListItemSecondaryAction,
-  Checkbox,
   TextField,
   Card,
   CardHeader,
@@ -17,10 +10,12 @@ import {
   CardActions,
   Collapse,
   IconButton,
+  InputAdornment,
 } from "@material-ui/core";
 
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 interface Props {
   index: number;
@@ -39,6 +34,8 @@ export const QuestionCreation: React.FC<Props> = ({ index }) => {
   const [cardOpen, toggleCardOpen] = useState(false);
 
   const [answers, modifyAnswers] = useState(["", ""]);
+
+  const [questionText, setQuestionText] = useState("");
 
   const classes = styles();
 
@@ -60,16 +57,41 @@ export const QuestionCreation: React.FC<Props> = ({ index }) => {
               rows={3}
               label={`Question`}
               fullWidth
+              onChange={(e) => setQuestionText(e.target.value)}
             />
           </>
-          {answers.map((answer, index) => {
+          {answers.map((answer, answerIndex) => {
             return (
               <>
                 <TextField
                   className={classes.textField}
                   variant="outlined"
-                  label={`Answer ${index + 1}`}
+                  label={`Answer ${answerIndex + 1}`}
                   fullWidth
+                  onChange={(e) =>
+                    modifyAnswers((m) => {
+                      m[answerIndex] = e.target.value;
+                      return m;
+                    })
+                  }
+                  value={answer}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          disabled={answers.length === 2}
+                          onClick={() =>
+                            modifyAnswers((m) => {
+                              m.splice(answerIndex, 1);
+                              return m;
+                            })
+                          }
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </>
             );
