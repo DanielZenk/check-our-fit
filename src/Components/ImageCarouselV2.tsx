@@ -1,12 +1,9 @@
 import React from "react";
 //material make styles
 import { makeStyles } from "@material-ui/core/styles";
-
-import { CardMedia } from "@material-ui/core";
 //carousel components
 import AwesomeSlider from "react-awesome-slider";
 import "react-awesome-slider/dist/styles.css";
-//aspect ratio
 
 interface Props {
   images: string[];

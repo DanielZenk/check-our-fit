@@ -10,7 +10,18 @@ import {
   Fab,
   ListItemSecondaryAction,
   Checkbox,
+  TextField,
+  Card,
+  CardHeader,
+  CardContent,
+  CardActions,
+  Collapse,
+  IconButton,
 } from "@material-ui/core";
+
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 //carousel components
 import AwesomeSlider from "react-awesome-slider";
 import "react-awesome-slider/dist/styles.css";
@@ -46,6 +57,11 @@ interface PostData {
   }>;
 }
 
+interface QuestionFormat {
+  questionText: string;
+  answers: Array<string>;
+}
+
 const styles = makeStyles({
   root: {
     textAlign: "center",
@@ -79,6 +95,16 @@ const styles = makeStyles({
     width: "95%",
     margin: "auto",
   },
+  fab: {
+    marginBottom: "5px",
+  },
+  questionContainer: {},
+  textField: {
+    marginBottom: "5px",
+  },
+  card: {
+    marginTop: "10px",
+  },
 });
 
 interface fileObject {
@@ -90,29 +116,102 @@ interface fileObject {
 export const Upload: React.FC<Props> = () => {
   const [post, setPost] = useState<Array<PostData> | undefined>(undefined);
 
-  const [currPage, setPage] = useState(0);
+  const [currPage, setPage] = useState(2);
 
   const [numQuestions, addQuestion] = useState(0);
 
+  const [questions, modifyQuestions] = useState<Array<QuestionFormat>>([]);
+
   const [images, setImages] = useState<Array<string> | undefined>(undefined);
+
+  const [openCards, setOpenCards] = useState([false, false, false, false]);
 
   const premadeQuestions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   const classes = styles();
 
+  const renderIndividualQuestion = (
+    question: QuestionFormat,
+    index: number
+  ) => {
+    return (
+      <Card raised className={classes.card}>
+        <CardHeader title={`Question ${index + 1}`} />
+        <CardActions disableSpacing>
+          <IconButton
+            onClick={() => {
+              var temp = openCards;
+              temp[index] = !temp[index];
+              setOpenCards(temp);
+            }}
+          >
+            {openCards[index] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          </IconButton>
+        </CardActions>
+        <Collapse in={openCards[index]}>
+          <>
+            <TextField
+              className={classes.textField}
+              variant="outlined"
+              multiline
+              rows={3}
+              label={`Question`}
+              fullWidth
+            />
+          </>
+          {question.answers.map((answer, index) => {
+            return (
+              <>
+                <TextField
+                  className={classes.textField}
+                  variant="outlined"
+                  label={`Answer ${index + 1}`}
+                  fullWidth
+                />
+              </>
+            );
+          })}
+          <>
+            <Button
+              onClick={() => {
+                var tempAnswers = question.answers;
+                tempAnswers.push("");
+                var tempQuestions = questions;
+                tempQuestions[index].answers = tempAnswers;
+                modifyQuestions(tempQuestions);
+              }}
+            >
+              Add Answer Option
+            </Button>
+          </>
+        </Collapse>
+      </Card>
+    );
+  };
+
   const renderQuestionForm = () => {
     return (
       <>
         <Typography className={classes.header}>
-          You can make {4 - numQuestions} more questions.
+          You can add {4 - numQuestions} more questions.
         </Typography>
-        <Fab
+        <Button
+          className={classes.fab}
+          variant="contained"
           disabled={numQuestions >= 4}
-          variant="extended"
-          onClick={() => addQuestion(numQuestions + 1)}
+          //variant="extended"
+          onClick={() => {
+            addQuestion(numQuestions + 1);
+            var temp = questions;
+            temp?.push({ questionText: "", answers: ["", ""] });
+            modifyQuestions(temp);
+          }}
         >
           Add question
-        </Fab>
+        </Button>
+        {questions?.map((question, index) => {
+          return <div>{renderIndividualQuestion(question, index)}</div>;
+        })}
       </>
     );
   };
