@@ -39,6 +39,15 @@ export const QuestionCreation: React.FC<Props> = ({ index }) => {
 
   const classes = styles();
 
+  const onAnswerChange = (e: any, answerIndex: number) => {
+    e.persist();
+    modifyAnswers((m) => {
+      e.persist();
+      m[answerIndex] = e.target.value;
+      return [...m];
+    });
+  };
+
   return (
     <Card raised className={classes.card}>
       <CardHeader title={`Question ${index + 1}`} />
@@ -68,12 +77,7 @@ export const QuestionCreation: React.FC<Props> = ({ index }) => {
                   variant="outlined"
                   label={`Answer ${answerIndex + 1}`}
                   fullWidth
-                  onChange={(e) =>
-                    modifyAnswers((m) => {
-                      m[answerIndex] = e.target.value;
-                      return m;
-                    })
-                  }
+                  onChange={(e) => onAnswerChange(e, answerIndex)}
                   value={answer}
                   InputProps={{
                     endAdornment: (
@@ -83,7 +87,7 @@ export const QuestionCreation: React.FC<Props> = ({ index }) => {
                           onClick={() =>
                             modifyAnswers((m) => {
                               m.splice(answerIndex, 1);
-                              return m;
+                              return [...m];
                             })
                           }
                         >

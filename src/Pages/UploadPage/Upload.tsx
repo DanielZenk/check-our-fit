@@ -25,6 +25,8 @@ import { ImageCarouselV2 } from "../../Components/ImageCarouselV2";
 
 import { QuestionCreation } from "../../Components/QuestionCreation";
 
+import { TopBar } from "../../Components/TopBar";
+
 interface Props {}
 
 interface PostData {
@@ -78,6 +80,7 @@ const styles = makeStyles({
     marginTop: "40px",
   },
   carouselItem: {
+    top: "50px",
     width: "100%",
     height: "100%",
     backgroundColor: "#fff",
@@ -91,6 +94,9 @@ const styles = makeStyles({
   },
   fab: {
     marginBottom: "5px",
+  },
+  slider: {
+    top: "50px",
   },
 });
 
@@ -166,7 +172,9 @@ export const Upload: React.FC<Props> = () => {
 
   return (
     <div>
+      <TopBar />
       <AwesomeSlider
+        className={classes.slider}
         fillParent
         mobileTouch={false}
         bullets={false}
