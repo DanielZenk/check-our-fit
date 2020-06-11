@@ -62,9 +62,7 @@ const styles = makeStyles({
   root: {
     textAlign: "center",
   },
-  header: {
-    marginTop: "10px",
-  },
+  header: {},
   list: {
     width: "95%",
     margin: "auto",
@@ -121,11 +119,22 @@ export const Upload: React.FC<Props> = () => {
 
   const classes = styles();
 
+  const onQuestionChange = (questionText: string, questionNumber: number) => {
+    var temp = questions;
+    temp[questionNumber].questionText = questionText;
+    modifyQuestions(temp);
+  };
+
   const renderIndividualQuestion = (
     question: QuestionFormat,
     index: number
   ) => {
-    return <QuestionCreation index={index} />;
+    return (
+      <QuestionCreation
+        index={index}
+        modifyQuestion={(t, n) => onQuestionChange(t, n)}
+      />
+    );
   };
 
   const renderQuestionForm = () => {

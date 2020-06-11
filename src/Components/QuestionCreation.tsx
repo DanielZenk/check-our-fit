@@ -19,6 +19,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 
 interface Props {
   index: number;
+  modifyQuestion: (questionText: string, questionNumber: number) => void;
 }
 
 const styles = makeStyles({
@@ -30,7 +31,10 @@ const styles = makeStyles({
   },
 });
 
-export const QuestionCreation: React.FC<Props> = ({ index }) => {
+export const QuestionCreation: React.FC<Props> = ({
+  index,
+  modifyQuestion,
+}) => {
   const [cardOpen, toggleCardOpen] = useState(false);
 
   const [answers, modifyAnswers] = useState(["", ""]);
@@ -66,7 +70,7 @@ export const QuestionCreation: React.FC<Props> = ({ index }) => {
               rows={3}
               label={`Question`}
               fullWidth
-              onChange={(e) => setQuestionText(e.target.value)}
+              onChange={(e) => modifyQuestion(e.target.value, index)}
             />
           </>
           {answers.map((answer, answerIndex) => {
