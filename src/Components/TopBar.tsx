@@ -24,7 +24,11 @@ const styles = makeStyles({
   },
 });
 
-export const TopBar: React.FC = () => {
+interface Props {
+  onNextClick: () => void;
+}
+
+export const TopBar: React.FC<Props> = ({ onNextClick }) => {
   const classes = styles();
 
   return (
@@ -35,7 +39,9 @@ export const TopBar: React.FC = () => {
             <ArrowBackIcon />
           </IconButton>
           <div className={classes.grow} />
-          <Button className={classes.button}>Next</Button>
+          <Button className={classes.button} onClick={() => onNextClick()}>
+            Next
+          </Button>
         </Toolbar>
       </AppBar>
     </div>

@@ -17,9 +17,20 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import DeleteIcon from "@material-ui/icons/Delete";
 
+interface QuestionFormat {
+  questionText: string;
+  answers: Array<string>;
+}
+
 interface Props {
   index: number;
   modifyQuestion: (questionText: string, questionNumber: number) => void;
+  modifyAnswer: (
+    answerText: string,
+    questionNumber: number,
+    answerNumber: number
+  ) => void;
+  onDelete: (question: QuestionFormat, questionIndex: number) => void;
 }
 
 const styles = makeStyles({
@@ -34,6 +45,8 @@ const styles = makeStyles({
 export const QuestionCreation: React.FC<Props> = ({
   index,
   modifyQuestion,
+  modifyAnswer,
+  onDelete,
 }) => {
   const [cardOpen, toggleCardOpen] = useState(false);
 
@@ -45,11 +58,16 @@ export const QuestionCreation: React.FC<Props> = ({
 
   const onAnswerChange = (e: any, answerIndex: number) => {
     e.persist();
+    modifyAnswer(e.target.value, index, answerIndex);
     modifyAnswers((m) => {
       e.persist();
       m[answerIndex] = e.target.value;
       return [...m];
     });
+  };
+
+  const handleDelete = (type: string, number: number) => {
+    onDelete({ questionText, answers }, index);
   };
 
   return (
@@ -88,12 +106,13 @@ export const QuestionCreation: React.FC<Props> = ({
                       <InputAdornment position="end">
                         <IconButton
                           disabled={answers.length === 2}
-                          onClick={() =>
+                          onClick={() => {
                             modifyAnswers((m) => {
                               m.splice(answerIndex, 1);
                               return [...m];
-                            })
-                          }
+                            });
+                            handleDelete("answer", answerIndex);
+                          }}
                         >
                           <DeleteIcon />
                         </IconButton>

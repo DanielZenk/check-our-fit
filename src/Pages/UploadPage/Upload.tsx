@@ -125,6 +125,22 @@ export const Upload: React.FC<Props> = () => {
     modifyQuestions(temp);
   };
 
+  const onDelete = (question: QuestionFormat, questionIndex: number) => {
+    const temp = questions;
+    temp[questionIndex] = question;
+    modifyQuestions(temp);
+  };
+
+  const onAnswerChange = (
+    answerText: string,
+    questionNumber: number,
+    answerNumber: number
+  ) => {
+    var temp = questions;
+    temp[questionNumber].answers[answerNumber] = answerText;
+    modifyQuestions(temp);
+  };
+
   const renderIndividualQuestion = (
     question: QuestionFormat,
     index: number
@@ -133,6 +149,8 @@ export const Upload: React.FC<Props> = () => {
       <QuestionCreation
         index={index}
         modifyQuestion={(t, n) => onQuestionChange(t, n)}
+        modifyAnswer={(t, qN, aN) => onAnswerChange(t, qN, aN)}
+        onDelete={(q, i) => onDelete(q, i)}
       />
     );
   };
@@ -181,7 +199,7 @@ export const Upload: React.FC<Props> = () => {
 
   return (
     <div>
-      <TopBar />
+      <TopBar onNextClick={() => console.log(questions)} />
       <AwesomeSlider
         className={classes.slider}
         fillParent
