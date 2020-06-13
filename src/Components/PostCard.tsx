@@ -44,11 +44,11 @@ interface Props {
         };
       };
     }>;
-    postId: string;
-    createdAt: string;
-    totalResponses: number;
-    handle: string;
-    userImage: string;
+    postId?: string;
+    createdAt?: string;
+    totalResponses?: number;
+    handle?: string;
+    userImage?: string;
   };
 }
 
@@ -80,11 +80,14 @@ export const PostCard: React.FC<Props> = ({ post }) => {
     }
     return (
       <Card className={classes.card}>
-        <CardHeader
-          avatar={<Avatar alt={post.handle} src={post.userImage} />}
-          title="Need to add title"
-          subheader={post.createdAt}
-        />
+        {post.postId ? (
+          <CardHeader
+            avatar={<Avatar alt={post.handle} src={post.userImage} />}
+            title="Need to add title"
+            subheader={post.createdAt}
+          />
+        ) : null}
+
         <CardContent>
           <ImageCarousel images={imagesArray} />
         </CardContent>
@@ -96,7 +99,7 @@ export const PostCard: React.FC<Props> = ({ post }) => {
             {expanded ? <ExpandLess /> : <ExpandMore />}
           </IconButton>
         </CardActions>
-        <Collapse in={expanded}>
+        <Collapse in={!post.postId && expanded}>
           <CardContent>
             <Suspense fallback={<h3>Questions being loaded...</h3>}>
               <Questionnaire questions={post.questions} postId={post.postId} />

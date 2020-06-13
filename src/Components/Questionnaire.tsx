@@ -28,7 +28,7 @@ interface Props {
     };
     totalResponses: number;
   }>;
-  postId: string;
+  postId?: string;
 }
 
 interface answersObject {
@@ -129,9 +129,13 @@ export const Questionnaire: React.FC<Props> = ({ questions, postId }) => {
       </div>
       <div>
         <FormControl fullWidth>
-          <Button onClick={() => submitAnswers()}>Submit</Button>
-          <Button>Clear</Button>
-          <Button>Skip</Button>
+          {postId ? (
+            <>
+              <Button onClick={() => submitAnswers()}>Submit</Button>
+              <Button>Clear</Button>
+              <Button>Skip</Button>
+            </>
+          ) : null}
         </FormControl>
       </div>
     </>

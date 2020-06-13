@@ -26,12 +26,14 @@ import { ImageCarouselV2 } from "../../Components/ImageCarouselV2";
 import { QuestionCreation } from "../../Components/QuestionCreation";
 
 import { TopBar } from "../../Components/TopBar";
+import { stringify } from "querystring";
 
 interface Props {}
 
 interface PostData {
   questions: Array<{
     questionText: string;
+    totalResponses: number;
     answers: {
       0?: {
         timesAnswered: number;
@@ -105,7 +107,7 @@ interface fileObject {
 }
 
 export const Upload: React.FC<Props> = () => {
-  const [post, setPost] = useState<Array<PostData> | undefined>(undefined);
+  const [post, setPost] = useState<PostData | undefined>(undefined);
 
   const [currPage, setPage] = useState(2);
 
@@ -197,9 +199,41 @@ export const Upload: React.FC<Props> = () => {
     setImages(tempArr);
   };
 
+  const handleNextClick = () => {
+    if (currPage === 2) {
+      var newPost: PostData = { questions: [] };
+      questions.forEach((question, index) => {
+        //newPost.questions[index] = {};
+        newPost.questions[index].questionText = question.questionText;
+        newPost.questions[index].totalResponses = 0;
+        if (question.answers.length === 2) {
+          newPost.questions[index].answers = {
+            0: { answerText: question.answers[0], timesAnswered: 0 },
+            1: { answerText: question.answers[1], timesAnswered: 0 },
+          };
+        } else if (question.answers.length === 3) {
+          newPost.questions[index].answers = {
+            0: { answerText: question.answers[0], timesAnswered: 0 },
+            1: { answerText: question.answers[1], timesAnswered: 0 },
+            2: { answerText: question.answers[2], timesAnswered: 0 },
+          };
+        } else if (question.answers.length === 4) {
+          newPost.questions[index].answers = {
+            0: { answerText: question.answers[0], timesAnswered: 0 },
+            1: { answerText: question.answers[1], timesAnswered: 0 },
+            2: { answerText: question.answers[2], timesAnswered: 0 },
+            3: { answerText: question.answers[3], timesAnswered: 0 },
+          };
+        }
+      });
+      setPost(newPost);
+    }
+    setPage(currPage + 1);
+  };
+
   return (
     <div>
-      <TopBar onNextClick={() => console.log(questions)} />
+      <TopBar onNextClick={() => handleNextClick()} />
       <AwesomeSlider
         className={classes.slider}
         fillParent
@@ -277,6 +311,11 @@ export const Upload: React.FC<Props> = () => {
         <div className={classes.carouselItem}>
           <div className={classes.carouselContent}>
             <div className={classes.questionForm}>{renderQuestionForm()}</div>
+          </div>
+        </div>
+        <div className={classes.carouselItem}>
+          <div className={classes.carouselContent}>
+            {post ? <PostCard post={post} /> : null}
           </div>
         </div>
       </AwesomeSlider>
