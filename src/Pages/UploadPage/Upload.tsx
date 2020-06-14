@@ -109,7 +109,7 @@ interface fileObject {
 export const Upload: React.FC<Props> = () => {
   const [post, setPost] = useState<PostData | undefined>(undefined);
 
-  const [currPage, setPage] = useState(2);
+  const [currPage, setPage] = useState(0);
 
   const [numQuestions, addQuestion] = useState(0);
 
