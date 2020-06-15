@@ -20,12 +20,6 @@ const styles = makeStyles({
   },
 });
 
-interface errorObj {
-  email: string | undefined;
-  password: string | undefined;
-  general: string | undefined;
-}
-
 function HomePage() {
   const [userObj, setUserObj] = useState({
     email: "",

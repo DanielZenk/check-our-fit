@@ -11,24 +11,14 @@ import {
   ListItemSecondaryAction,
   Checkbox,
 } from "@material-ui/core";
-
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 //carousel components
 import AwesomeSlider from "react-awesome-slider";
 import "react-awesome-slider/dist/styles.css";
 //created components
 import { PostCard } from "../../Components/PostCard";
 import { ImageCarousel } from "../../Components/ImageCarousel";
-
-import { ImageCarouselV2 } from "../../Components/ImageCarouselV2";
-
 import { QuestionCreation } from "../../Components/QuestionCreation";
-
 import { TopBar } from "../../Components/TopBar";
-import { stringify } from "querystring";
-
-interface Props {}
 
 interface PostData {
   questions: Array<{
@@ -106,7 +96,7 @@ interface fileObject {
   };
 }
 
-export const Upload: React.FC<Props> = () => {
+export const Upload: React.FC = () => {
   const [post, setPost] = useState<PostData | undefined>(undefined);
 
   const [currPage, setPage] = useState(0);

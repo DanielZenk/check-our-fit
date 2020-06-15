@@ -16,8 +16,6 @@ import { IndividualPost } from "./IndividualPost";
 //user context
 import { UserContext } from "../../Context/UserContext";
 
-interface Props {}
-
 interface PostData {
   questions: Array<{
     questionText: string;
@@ -60,7 +58,7 @@ const styles = makeStyles({
   },
 });
 
-export const UserPosts: React.FC<Props> = () => {
+export const UserPosts: React.FC = () => {
   const classes = styles();
   //cardId should change to a string if a card is selected
   const [cardId, clickCard] = useState<string | undefined>(undefined);

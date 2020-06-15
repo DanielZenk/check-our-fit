@@ -5,8 +5,6 @@ import { Card, Grid, Typography } from "@material-ui/core";
 //victory components (graph)
 import { VictoryBar, VictoryAxis, VictoryChart, VictoryLabel } from "victory";
 
-interface Props {}
-
 const styles = makeStyles({
   card: {
     marginLeft: "10px",
@@ -14,7 +12,7 @@ const styles = makeStyles({
   },
 });
 
-export const IndividualPost: React.FC<Props> = () => {
+export const IndividualPost: React.FC = () => {
   const classes = styles();
   const data = [
     {
