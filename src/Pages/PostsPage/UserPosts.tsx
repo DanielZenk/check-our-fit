@@ -63,6 +63,7 @@ export const UserPosts: React.FC = () => {
   //cardId should change to a string if a card is selected
   const [cardId, clickCard] = useState<string | undefined>(undefined);
   const [posts, setPosts] = useState<Array<PostData> | undefined>(undefined);
+  const [currPost, setCurrPost] = useState<PostData | undefined>(undefined);
 
   const userObject = useContext(UserContext);
 
@@ -120,7 +121,7 @@ export const UserPosts: React.FC = () => {
             <Button
               size="small"
               color="primary"
-              onClick={() => clickCard(post.postId)}
+              onClick={() => setCurrPost(post)}
             >
               View Responses
             </Button>
@@ -148,10 +149,12 @@ export const UserPosts: React.FC = () => {
   };
 
   const renderIndividualPost = () => {
-    return <IndividualPost />;
+    if (currPost) {
+      return <IndividualPost post={currPost} />;
+    } else return null;
   };
 
   return (
-    <Grid container>{!cardId ? renderCards() : renderIndividualPost()}</Grid>
+    <Grid container>{!currPost ? renderCards() : renderIndividualPost()}</Grid>
   );
 };

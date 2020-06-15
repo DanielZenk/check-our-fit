@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 //material components
 import { makeStyles } from "@material-ui/core/styles";
 import { Card, Grid, Typography } from "@material-ui/core";
@@ -12,7 +12,50 @@ const styles = makeStyles({
   },
 });
 
-export const IndividualPost: React.FC = () => {
+interface PostData {
+  questions: Array<{
+    questionText: string;
+    totalResponses: number;
+    answers: {
+      0?: {
+        timesAnswered: number;
+        answerText: string;
+      };
+      1?: {
+        timesAnswered: number;
+        answerText: string;
+      };
+      2?: {
+        timesAnswered: number;
+        answerText: string;
+      };
+      3?: {
+        timesAnswered: number;
+        answerText: string;
+      };
+    };
+  }>;
+  postId: string;
+  createdAt: string;
+  totalResponses: number;
+  handle: string;
+  userImage: string;
+}
+
+interface graphFormat {
+  question: string;
+  answers: Array<{
+    answers: number;
+    responses: number;
+    label: number;
+  }>;
+}
+
+interface Props {
+  post: PostData;
+}
+
+export const IndividualPost: React.FC<Props> = ({ post }) => {
   const classes = styles();
   const data = [
     {
@@ -53,10 +96,39 @@ export const IndividualPost: React.FC = () => {
     },
   ];
 
+  const [formattedData, setFormattedData] = useState<
+    Array<graphFormat> | undefined
+  >(undefined);
+
+  useEffect(() => {
+    if (!formattedData) {
+      console.log(post);
+      const newData: Array<graphFormat> = [];
+      post.questions.forEach((question) => {
+        let temp: any = {};
+        temp.question = question.questionText;
+        temp.answers = [];
+        Object.values(question.answers).forEach((answer, index) => {
+          temp.answers.push({
+            answers: index,
+            responses: answer?.timesAnswered,
+            label: answer?.timesAnswered,
+          });
+        });
+        newData.push(temp);
+      });
+      console.log(newData);
+      setFormattedData(newData);
+    }
+  });
+
   const renderGraph = (questionNumber: number) => {
+    if (!formattedData) return null;
     return (
       <>
-        <Typography variant="h6">{data[questionNumber].question}</Typography>
+        <Typography variant="h6">
+          {formattedData[questionNumber].question}
+        </Typography>
         <VictoryChart
           // domainPadding will add space to each side of VictoryBar to
           // prevent it from overlapping the axis
@@ -74,7 +146,7 @@ export const IndividualPost: React.FC = () => {
             tickFormat={(x) => `${x}`}
           />
           <VictoryBar
-            data={data[questionNumber].answers}
+            data={formattedData[questionNumber].answers}
             x="answers"
             y="responses"
           />
@@ -85,12 +157,13 @@ export const IndividualPost: React.FC = () => {
   };
 
   const renderResponses = () => {
-    return data.map((question, index) => {
+    if (!formattedData) return null;
+    return formattedData.map((question, index) => {
       return (
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <Card className={classes.card}>
             <Grid container>
-              <Grid item xs={8}>
+              <Grid item xs={12}>
                 {renderGraph(index)}
               </Grid>
             </Grid>
@@ -100,5 +173,5 @@ export const IndividualPost: React.FC = () => {
     });
   };
 
-  return <>{renderResponses()}</>;
+  return <>{formattedData ? renderResponses() : null}</>;
 };
