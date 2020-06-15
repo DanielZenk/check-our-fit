@@ -20,6 +20,8 @@ const Questionnaire = React.lazy(() =>
   }))
 );
 
+//This component is reused to show a user their post before its made.
+// so things like postId created at wouldn't exist yet
 interface Props {
   post?: {
     questions: Array<{
@@ -49,6 +51,7 @@ interface Props {
     totalResponses?: number;
     handle?: string;
     userImage?: string;
+    images?: Array<string>;
   };
 }
 
@@ -89,7 +92,7 @@ export const PostCard: React.FC<Props> = ({ post }) => {
         ) : null}
 
         <CardContent>
-          <ImageCarousel images={imagesArray} />
+          <ImageCarousel images={post.images ? post.images : imagesArray} />
         </CardContent>
         <CardActions disableSpacing>
           <IconButton
@@ -99,7 +102,7 @@ export const PostCard: React.FC<Props> = ({ post }) => {
             {expanded ? <ExpandLess /> : <ExpandMore />}
           </IconButton>
         </CardActions>
-        <Collapse in={!post.postId && expanded}>
+        <Collapse in={!post.postId || expanded}>
           <CardContent>
             <Suspense fallback={<h3>Questions being loaded...</h3>}>
               <Questionnaire questions={post.questions} postId={post.postId} />

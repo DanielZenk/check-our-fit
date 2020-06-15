@@ -40,6 +40,9 @@ const styles = makeStyles({
   textField: {
     marginBottom: "5px",
   },
+  deleteButton: {
+    marginLeft: "auto",
+  },
 });
 
 export const QuestionCreation: React.FC<Props> = ({
@@ -48,7 +51,7 @@ export const QuestionCreation: React.FC<Props> = ({
   modifyAnswer,
   onDelete,
 }) => {
-  const [cardOpen, toggleCardOpen] = useState(false);
+  const [cardOpen, toggleCardOpen] = useState(true);
 
   const [answers, modifyAnswers] = useState(["", ""]);
 
@@ -60,7 +63,6 @@ export const QuestionCreation: React.FC<Props> = ({
     e.persist();
     modifyAnswer(e.target.value, index, answerIndex);
     modifyAnswers((m) => {
-      e.persist();
       m[answerIndex] = e.target.value;
       return [...m];
     });
@@ -76,6 +78,9 @@ export const QuestionCreation: React.FC<Props> = ({
       <CardActions disableSpacing>
         <IconButton onClick={() => toggleCardOpen(!cardOpen)}>
           {cardOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        </IconButton>
+        <IconButton className={classes.deleteButton}>
+          <DeleteIcon />
         </IconButton>
       </CardActions>
       <Collapse in={cardOpen}>

@@ -9,7 +9,7 @@ import { Upload } from "./Pages/UploadPage/Upload";
 ReactDOM.render(
   <React.StrictMode>
     <Router>
-      <Upload />
+      <HomePage />
     </Router>
   </React.StrictMode>,
   document.getElementById("root")

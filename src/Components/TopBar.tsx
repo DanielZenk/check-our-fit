@@ -26,21 +26,33 @@ const styles = makeStyles({
 
 interface Props {
   onNextClick: () => void;
+  onBackClick: () => void;
+  currPage: number;
 }
 
-export const TopBar: React.FC<Props> = ({ onNextClick }) => {
+export const TopBar: React.FC<Props> = ({
+  onNextClick,
+  onBackClick,
+  currPage,
+}) => {
   const classes = styles();
 
   return (
     <div>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu">
+          <IconButton
+            disabled={currPage === 0}
+            onClick={() => onBackClick()}
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+          >
             <ArrowBackIcon />
           </IconButton>
           <div className={classes.grow} />
           <Button className={classes.button} onClick={() => onNextClick()}>
-            Next
+            {currPage === 3 ? <>Post</> : <>Next</>}
           </Button>
         </Toolbar>
       </AppBar>

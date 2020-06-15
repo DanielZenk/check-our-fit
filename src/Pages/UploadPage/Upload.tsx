@@ -43,6 +43,7 @@ interface PostData {
       };
     };
   }>;
+  images?: Array<string>;
 }
 
 interface QuestionFormat {
@@ -54,7 +55,9 @@ const styles = makeStyles({
   root: {
     textAlign: "center",
   },
-  header: {},
+  header: {
+    marginTop: "10px",
+  },
   list: {
     width: "95%",
     margin: "auto",
@@ -193,9 +196,13 @@ export const Upload: React.FC = () => {
     if (currPage === 2) {
       var newPost: PostData = { questions: [] };
       questions.forEach((question, index) => {
-        //newPost.questions[index] = {};
+        newPost.images = images;
+        newPost.questions[index] = {
+          questionText: "",
+          totalResponses: 0,
+          answers: {},
+        };
         newPost.questions[index].questionText = question.questionText;
-        newPost.questions[index].totalResponses = 0;
         if (question.answers.length === 2) {
           newPost.questions[index].answers = {
             0: { answerText: question.answers[0], timesAnswered: 0 },
@@ -217,13 +224,19 @@ export const Upload: React.FC = () => {
         }
       });
       setPost(newPost);
+    } else if (currPage === 3) {
+      console.log(post);
     }
     setPage(currPage + 1);
   };
 
   return (
     <div>
-      <TopBar onNextClick={() => handleNextClick()} />
+      <TopBar
+        currPage={currPage}
+        onBackClick={() => setPage(currPage - 1)}
+        onNextClick={() => handleNextClick()}
+      />
       <AwesomeSlider
         className={classes.slider}
         fillParent
@@ -256,13 +269,6 @@ export const Upload: React.FC = () => {
               {images ? (
                 <>
                   <ImageCarousel images={images} />
-                  <Fab
-                    disabled={numQuestions >= 4}
-                    variant="extended"
-                    onClick={() => setPage(1)}
-                  >
-                    Lets look at questions!
-                  </Fab>
                 </>
               ) : null}
             </div>
@@ -285,17 +291,6 @@ export const Upload: React.FC = () => {
                 );
               })}
             </List>
-            <Typography className={classes.header}>
-              Or you can come up with your own.
-            </Typography>
-
-            <Fab
-              disabled={numQuestions >= 4}
-              variant="extended"
-              onClick={() => setPage(2)}
-            >
-              Create my own
-            </Fab>
           </div>
         </div>
         <div className={classes.carouselItem}>
