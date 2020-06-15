@@ -81,6 +81,17 @@ export const UserPosts: React.FC = () => {
     }
   });
 
+  const deletePost = (postId: string) => {
+    fetch(`/api/post/${postId}`, {
+      method: "delete",
+      headers: {
+        Authorization: `Bearer ${userObject.token}`,
+      },
+    })
+      .then((result) => result.json())
+      .then((result) => console.log(result));
+  };
+
   //() => clickCard(id)
   const renderCard = (post: PostData) => {
     const newDate = new Date(post.createdAt);
@@ -113,7 +124,11 @@ export const UserPosts: React.FC = () => {
             >
               View Responses
             </Button>
-            <Button size="small" color="primary">
+            <Button
+              size="small"
+              color="primary"
+              onClick={() => deletePost(post.postId)}
+            >
               Delete
             </Button>
           </CardActions>
