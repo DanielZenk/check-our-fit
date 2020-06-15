@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 //material components
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -19,6 +19,8 @@ import { PostCard } from "../../Components/PostCard";
 import { ImageCarousel } from "../../Components/ImageCarousel";
 import { QuestionCreation } from "../../Components/QuestionCreation";
 import { TopBar } from "../../Components/TopBar";
+//user context
+import { UserContext } from "../../Context/UserContext";
 
 interface PostData {
   questions: Array<{
@@ -44,6 +46,13 @@ interface PostData {
     };
   }>;
   images?: Array<string>;
+}
+
+interface UploadFormat {
+  questions: Array<{
+    questionText: string;
+    answers: Array<string>;
+  }>;
 }
 
 interface QuestionFormat {
@@ -100,7 +109,13 @@ interface fileObject {
 }
 
 export const Upload: React.FC = () => {
+  const userObj = useContext(UserContext);
+
   const [post, setPost] = useState<PostData | undefined>(undefined);
+
+  const [finalPost, setFinalPost] = useState<UploadFormat | undefined>(
+    undefined
+  );
 
   const [currPage, setPage] = useState(0);
 
@@ -192,42 +207,66 @@ export const Upload: React.FC = () => {
     setImages(tempArr);
   };
 
+  //format the questions to be an object accepted by the post card,
+  // and by the api
+  // this is pretty FUBAR, need to reformat stuff on the backend.
+  // It works but its ugly so it'll be changed in the near future
+  const formatQuestions = () => {
+    var newPost: PostData = { questions: [] };
+    var uploadFormattedPost: UploadFormat = {
+      questions: [{ questionText: "", answers: [""] }],
+    };
+    questions.forEach((question, index) => {
+      newPost.images = images;
+      newPost.questions[index] = {
+        questionText: "",
+        totalResponses: 0,
+        answers: {},
+      };
+      newPost.questions[index].questionText = question.questionText;
+      uploadFormattedPost.questions[index].questionText = question.questionText;
+      uploadFormattedPost.questions[index].answers = question.answers;
+      if (question.answers.length === 2) {
+        newPost.questions[index].answers = {
+          0: { answerText: question.answers[0], timesAnswered: 0 },
+          1: { answerText: question.answers[1], timesAnswered: 0 },
+        };
+      } else if (question.answers.length === 3) {
+        newPost.questions[index].answers = {
+          0: { answerText: question.answers[0], timesAnswered: 0 },
+          1: { answerText: question.answers[1], timesAnswered: 0 },
+          2: { answerText: question.answers[2], timesAnswered: 0 },
+        };
+      } else if (question.answers.length === 4) {
+        newPost.questions[index].answers = {
+          0: { answerText: question.answers[0], timesAnswered: 0 },
+          1: { answerText: question.answers[1], timesAnswered: 0 },
+          2: { answerText: question.answers[2], timesAnswered: 0 },
+          3: { answerText: question.answers[3], timesAnswered: 0 },
+        };
+      }
+    });
+    setPost(newPost);
+    setFinalPost(uploadFormattedPost);
+  };
+
   const handleNextClick = () => {
     if (currPage === 2) {
-      var newPost: PostData = { questions: [] };
-      questions.forEach((question, index) => {
-        newPost.images = images;
-        newPost.questions[index] = {
-          questionText: "",
-          totalResponses: 0,
-          answers: {},
-        };
-        newPost.questions[index].questionText = question.questionText;
-        if (question.answers.length === 2) {
-          newPost.questions[index].answers = {
-            0: { answerText: question.answers[0], timesAnswered: 0 },
-            1: { answerText: question.answers[1], timesAnswered: 0 },
-          };
-        } else if (question.answers.length === 3) {
-          newPost.questions[index].answers = {
-            0: { answerText: question.answers[0], timesAnswered: 0 },
-            1: { answerText: question.answers[1], timesAnswered: 0 },
-            2: { answerText: question.answers[2], timesAnswered: 0 },
-          };
-        } else if (question.answers.length === 4) {
-          newPost.questions[index].answers = {
-            0: { answerText: question.answers[0], timesAnswered: 0 },
-            1: { answerText: question.answers[1], timesAnswered: 0 },
-            2: { answerText: question.answers[2], timesAnswered: 0 },
-            3: { answerText: question.answers[3], timesAnswered: 0 },
-          };
-        }
-      });
-      setPost(newPost);
+      formatQuestions();
+      setPage(currPage + 1);
     } else if (currPage === 3) {
-      console.log(post);
+      fetch(`/api/post`, {
+        method: "post",
+        headers: {
+          Authorization: `Bearer ${userObj.token}`,
+        },
+        body: JSON.stringify(finalPost),
+      })
+        .then((result) => result.json())
+        .then((result) => console.log(result));
+    } else {
+      setPage(currPage + 1);
     }
-    setPage(currPage + 1);
   };
 
   return (
