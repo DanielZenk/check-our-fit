@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from "react";
+import React, { useState, Suspense, useContext } from "react";
 //material components
 import {
   Avatar,
@@ -8,12 +8,16 @@ import {
   CardActions,
   IconButton,
   Collapse,
+  Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 //created components
 import { ImageCarousel } from "./ImageCarousel";
+//context
+
+import { UserContext } from "../Context/UserContext";
 const Questionnaire = React.lazy(() =>
   import("./Questionnaire").then(({ Questionnaire }) => ({
     default: Questionnaire,
@@ -77,6 +81,8 @@ export const PostCard: React.FC<Props> = ({ post }) => {
 
   const classes = styles();
 
+  const userObj = useContext(UserContext);
+
   const renderCard = () => {
     if (!post) {
       return null;
@@ -93,9 +99,13 @@ export const PostCard: React.FC<Props> = ({ post }) => {
 
         <CardContent>
           <ImageCarousel images={post.images ? post.images : imagesArray} />
+          {userObj.token.length > 2 ? null : (
+            <Typography variant="h6">Log in to answer posts!</Typography>
+          )}
         </CardContent>
         <CardActions disableSpacing>
           <IconButton
+            disabled={!(userObj.token.length > 2)}
             className={classes.expandIcon}
             onClick={() => toggleExpansion(!expanded)}
           >
