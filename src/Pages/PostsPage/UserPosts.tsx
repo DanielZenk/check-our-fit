@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 //created components
 import { IndividualPost } from "./IndividualPost";
+import { UserCard } from "../../Components/UserCard";
 //user context
 import { UserContext } from "../../Context/UserContext";
 
@@ -155,6 +156,13 @@ export const UserPosts: React.FC = () => {
   };
 
   return (
-    <Grid container>{!currPost ? renderCards() : renderIndividualPost()}</Grid>
+    <Grid container>
+      {!currPost ? (
+        <Grid item xs={12}>
+          <UserCard createdAt="" userImage="" />
+        </Grid>
+      ) : null}
+      {!currPost ? renderCards() : renderIndividualPost()}
+    </Grid>
   );
 };

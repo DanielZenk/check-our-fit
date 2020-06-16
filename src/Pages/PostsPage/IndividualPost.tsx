@@ -3,12 +3,18 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Card, Grid, Typography } from "@material-ui/core";
 //victory components (graph)
-import { VictoryBar, VictoryAxis, VictoryChart, VictoryLabel } from "victory";
+//nivo pie chart
+import { ResponsivePie, PieDatum } from "@nivo/pie";
 
 const styles = makeStyles({
   card: {
-    marginLeft: "10px",
-    marginTop: "10px",
+    width: "95%",
+    margin: "auto",
+    marginTop: "15px",
+    height: "100%",
+  },
+  cardContainer: {
+    height: "300px",
   },
 });
 
@@ -43,12 +49,10 @@ interface PostData {
 }
 
 interface graphFormat {
-  question: string;
-  answers: Array<{
-    answers: number;
-    responses: number;
-    label: number;
-  }>;
+  id: string;
+  label: string;
+  value: number;
+  color: string;
 }
 
 interface Props {
@@ -57,65 +61,31 @@ interface Props {
 
 export const IndividualPost: React.FC<Props> = ({ post }) => {
   const classes = styles();
-  const data = [
-    {
-      question: "what are animals",
-      answers: [
-        { answers: 1, responses: 13000, label: 13000 },
-        { answers: 2, responses: 16500, label: 16500 },
-        { answers: 3, responses: 14250, label: 14250 },
-        { answers: 4, responses: 19000, label: 19000 },
-      ],
-    },
-    {
-      question: "what the frick frack",
-      answers: [
-        { answers: 1, responses: 13000, label: 13000 },
-        { answers: 2, responses: 16500, label: 16500 },
-        { answers: 3, responses: 14250, label: 14250 },
-        { answers: 4, responses: 19000, label: 19000 },
-      ],
-    },
-    {
-      question: "what are animals",
-      answers: [
-        { answers: 1, responses: 13000, label: 13000 },
-        { answers: 2, responses: 16500, label: 16500 },
-        { answers: 3, responses: 14250, label: 14250 },
-        { answers: 4, responses: 19000, label: 19000 },
-      ],
-    },
-    {
-      question: "what the frick frack",
-      answers: [
-        { answers: 1, responses: 13000, label: 13000 },
-        { answers: 2, responses: 16500, label: 16500 },
-        { answers: 3, responses: 14250, label: 14250 },
-        { answers: 4, responses: 19000, label: 19000 },
-      ],
-    },
-  ];
 
   const [formattedData, setFormattedData] = useState<
-    Array<graphFormat> | undefined
+    Array<PieDatum[]> | undefined
   >(undefined);
+
+  const getRandomInt = (max: number) => {
+    return Math.floor(Math.random() * Math.floor(max));
+  };
 
   useEffect(() => {
     if (!formattedData) {
       console.log(post);
-      const newData: Array<graphFormat> = [];
-      post.questions.forEach((question) => {
-        let temp: any = {};
-        temp.question = question.questionText;
-        temp.answers = [];
+      const newData: Array<PieDatum[]> = [];
+      post.questions.forEach((question, qIndex) => {
+        newData[qIndex] = [];
         Object.values(question.answers).forEach((answer, index) => {
-          temp.answers.push({
-            answers: index,
-            responses: answer?.timesAnswered,
-            label: answer?.timesAnswered,
-          });
+          let temp: any = {};
+          temp.id = answer?.answerText;
+          temp.label = answer?.answerText;
+          temp.value = answer?.timesAnswered;
+          temp.color = `hsl(${getRandomInt(300)}, ${getRandomInt(
+            100
+          )}%, ${getRandomInt(100)}%)`;
+          newData[qIndex].push(temp);
         });
-        newData.push(temp);
       });
       console.log(newData);
       setFormattedData(newData);
@@ -126,32 +96,29 @@ export const IndividualPost: React.FC<Props> = ({ post }) => {
     if (!formattedData) return null;
     return (
       <>
-        <Typography variant="h6">
-          {formattedData[questionNumber].question}
-        </Typography>
-        <VictoryChart
-          // domainPadding will add space to each side of VictoryBar to
-          // prevent it from overlapping the axis
-          domainPadding={20}
-        >
-          <VictoryAxis
-            // tickValues specifies both the number of ticks and where
-            // they are placed on the axis
-            tickValues={[1, 2, 3, 4]}
-            tickFormat={["Answer 1", "Answer 2", "Answer 3", "Answer 4"]}
-          />
-          <VictoryAxis
-            dependentAxis
-            // tickFormat specifies how ticks should be displayed
-            tickFormat={(x) => `${x}`}
-          />
-          <VictoryBar
-            data={formattedData[questionNumber].answers}
-            x="answers"
-            y="responses"
-          />
-          <VictoryLabel />
-        </VictoryChart>
+        <ResponsivePie
+          data={formattedData[questionNumber]}
+          margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+          innerRadius={0.5}
+          padAngle={0.7}
+          cornerRadius={3}
+          colors={{ scheme: "nivo" }}
+          borderWidth={1}
+          borderColor={{ from: "color", modifiers: [["darker", 0.2]] }}
+          radialLabelsSkipAngle={10}
+          radialLabelsTextXOffset={6}
+          radialLabelsTextColor="#333333"
+          radialLabelsLinkOffset={0}
+          radialLabelsLinkDiagonalLength={16}
+          radialLabelsLinkHorizontalLength={24}
+          radialLabelsLinkStrokeWidth={1}
+          radialLabelsLinkColor={{ from: "color" }}
+          slicesLabelsSkipAngle={10}
+          slicesLabelsTextColor="#333333"
+          animate={true}
+          motionStiffness={90}
+          motionDamping={15}
+        />
       </>
     );
   };
@@ -161,13 +128,14 @@ export const IndividualPost: React.FC<Props> = ({ post }) => {
     return formattedData.map((question, index) => {
       return (
         <Grid item xs={12}>
-          <Card className={classes.card}>
-            <Grid container>
-              <Grid item xs={12}>
-                {renderGraph(index)}
-              </Grid>
-            </Grid>
-          </Card>
+          <div className={classes.cardContainer}>
+            <Card raised className={classes.card}>
+              <Typography variant="h6">
+                {post.questions[index].questionText}
+              </Typography>
+              {renderGraph(index)}
+            </Card>
+          </div>
         </Grid>
       );
     });
