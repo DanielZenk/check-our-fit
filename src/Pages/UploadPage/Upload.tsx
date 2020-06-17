@@ -224,6 +224,10 @@ export const Upload: React.FC = () => {
         answers: {},
       };
       newPost.questions[index].questionText = question.questionText;
+      uploadFormattedPost.questions[index] = {
+        questionText: "",
+        answers: [""],
+      };
       uploadFormattedPost.questions[index].questionText = question.questionText;
       uploadFormattedPost.questions[index].answers = question.answers;
       if (question.answers.length === 2) {
