@@ -119,6 +119,9 @@ export const IndividualPost: React.FC<Props> = ({ post }) => {
           motionStiffness={90}
           motionDamping={15}
         />
+        <>
+          <Typography variant="h6"></Typography>
+        </>
       </>
     );
   };
