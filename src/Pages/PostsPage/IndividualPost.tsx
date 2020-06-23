@@ -14,7 +14,7 @@ const styles = makeStyles({
     height: "100%",
   },
   cardContainer: {
-    height: "300px",
+    height: "500px",
   },
 });
 
@@ -78,7 +78,7 @@ export const IndividualPost: React.FC<Props> = ({ post }) => {
         newData[qIndex] = [];
         Object.values(question.answers).forEach((answer, index) => {
           let temp: any = {};
-          temp.id = answer?.answerText;
+          temp.id = `A${index + 1}`;
           temp.label = answer?.answerText;
           temp.value = answer?.timesAnswered;
           temp.color = `hsl(${getRandomInt(300)}, ${getRandomInt(
@@ -92,8 +92,19 @@ export const IndividualPost: React.FC<Props> = ({ post }) => {
     }
   });
 
+  const renderLegend = (questionNumber: number) => {
+    if (!formattedData) return null;
+    return formattedData[questionNumber].forEach((answer, index) => {
+      return (
+        <Typography variant="h6">{`A${index + 1}: ${answer.label}`}</Typography>
+      );
+    });
+  };
+
   const renderGraph = (questionNumber: number) => {
     if (!formattedData) return null;
+    //console.log(formattedData[questionNumber]);
+    console.log(post.questions[questionNumber]);
     return (
       <>
         <ResponsivePie
@@ -119,9 +130,6 @@ export const IndividualPost: React.FC<Props> = ({ post }) => {
           motionStiffness={90}
           motionDamping={15}
         />
-        <>
-          <Typography variant="h6"></Typography>
-        </>
       </>
     );
   };
@@ -137,6 +145,7 @@ export const IndividualPost: React.FC<Props> = ({ post }) => {
                 {post.questions[index].questionText}
               </Typography>
               {renderGraph(index)}
+              {renderLegend(index)}
             </Card>
           </div>
         </Grid>
