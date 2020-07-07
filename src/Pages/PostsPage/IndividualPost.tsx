@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 //material components
 import { makeStyles } from "@material-ui/core/styles";
-import { Card, Grid, Typography } from "@material-ui/core";
+import {
+  Card,
+  Grid,
+  Typography,
+  CardHeader,
+  CardContent,
+  Collapse,
+} from "@material-ui/core";
 //victory components (graph)
 //nivo pie chart
 import { ResponsivePie, PieDatum } from "@nivo/pie";
@@ -94,9 +101,13 @@ export const IndividualPost: React.FC<Props> = ({ post }) => {
 
   const renderLegend = (questionNumber: number) => {
     if (!formattedData) return null;
-    return formattedData[questionNumber].forEach((answer, index) => {
+    return formattedData[questionNumber].map((answer, index) => {
       return (
-        <Typography variant="h6">{`A${index + 1}: ${answer.label}`}</Typography>
+        <div>
+          <Typography variant="h6">{`A${index + 1}: ${
+            answer.label
+          }`}</Typography>
+        </div>
       );
     });
   };
@@ -106,7 +117,7 @@ export const IndividualPost: React.FC<Props> = ({ post }) => {
     //console.log(formattedData[questionNumber]);
     console.log(post.questions[questionNumber]);
     return (
-      <>
+      <div style={{ height: 200 }}>
         <ResponsivePie
           data={formattedData[questionNumber]}
           margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
@@ -130,7 +141,7 @@ export const IndividualPost: React.FC<Props> = ({ post }) => {
           motionStiffness={90}
           motionDamping={15}
         />
-      </>
+      </div>
     );
   };
 
@@ -145,7 +156,7 @@ export const IndividualPost: React.FC<Props> = ({ post }) => {
                 {post.questions[index].questionText}
               </Typography>
               {renderGraph(index)}
-              {renderLegend(index)}
+              <Collapse in={true}>{renderLegend(index)}</Collapse>
             </Card>
           </div>
         </Grid>
