@@ -48,11 +48,6 @@ module.exports = {
       template: __dirname + "/src/index.html",
       inject: "body",
     }),
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   name: "vendor",
-    //   filename: "mstyles.js",
-    //   minChunks: Infinity,
-    // }),
   ],
   output: {
     filename: "[id].main.js",

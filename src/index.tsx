@@ -7,12 +7,14 @@ import { Upload } from "./Pages/UploadPage/Upload";
 
 //should render homepage but this skips the login
 ReactDOM.render(
-  <React.StrictMode>
-    <Router>
-      <HomePage />
-    </Router>
-  </React.StrictMode>,
-  document.getElementById("root")
+  <div>
+    <React.StrictMode>
+      <Router>
+        <HomePage />
+      </Router>
+    </React.StrictMode>
+  </div>,
+  document.getElementById("wrapper")
 );
 
 // If you want your app to work offline and load faster, you can change
