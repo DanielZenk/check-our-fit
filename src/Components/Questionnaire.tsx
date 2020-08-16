@@ -105,13 +105,16 @@ export const Questionnaire: React.FC<Props> = ({ questions, postId }) => {
 
   const submitAnswers = () => {
     const answersObj = { answers };
-    fetch(`/api/post/${postId}/answer`, {
-      method: "post",
-      headers: {
-        Authorization: `Bearer ${userObj.token}`,
-      },
-      body: JSON.stringify(answersObj),
-    })
+    fetch(
+      `https://us-central1-fashionable-typescript.cloudfunctions.net/api/post/${postId}/answer`,
+      {
+        method: "post",
+        headers: {
+          Authorization: `Bearer ${userObj.token}`,
+        },
+        body: JSON.stringify(answersObj),
+      }
+    )
       .then((result) => {
         result.json();
       })

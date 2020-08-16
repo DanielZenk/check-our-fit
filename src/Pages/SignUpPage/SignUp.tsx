@@ -111,10 +111,13 @@ function SignUp() {
       confirmPassword: confirmPass,
       handle: user,
     };
-    fetch("/api/signup", {
-      method: "post",
-      body: JSON.stringify(signUpObj),
-    })
+    fetch(
+      "https://us-central1-fashionable-typescript.cloudfunctions.net/api/signup",
+      {
+        method: "post",
+        body: JSON.stringify(signUpObj),
+      }
+    )
       .then((res) => res.json())
       .then((res) => {
         if (!res.token) {

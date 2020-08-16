@@ -210,7 +210,7 @@ export const Upload: React.FC = () => {
   //format the questions to be an object accepted by the post card,
   // and by the api
   // this is pretty FUBAR, need to reformat stuff on the backend.
-  // It works but its ugly so it'll be changed in the near future
+  // It works but its ugly so it'll be changed in the future
   const formatQuestions = () => {
     var newPost: PostData = { questions: [] };
     var uploadFormattedPost: UploadFormat = {
@@ -259,13 +259,16 @@ export const Upload: React.FC = () => {
       formatQuestions();
       setPage(currPage + 1);
     } else if (currPage === 3) {
-      fetch(`/api/post`, {
-        method: "post",
-        headers: {
-          Authorization: `Bearer ${userObj.token}`,
-        },
-        body: JSON.stringify(finalPost),
-      })
+      fetch(
+        `https://us-central1-fashionable-typescript.cloudfunctions.net/api/post`,
+        {
+          method: "post",
+          headers: {
+            Authorization: `Bearer ${userObj.token}`,
+          },
+          body: JSON.stringify(finalPost),
+        }
+      )
         .then((result) => result.json())
         .then((result) => console.log(result));
     } else {

@@ -88,10 +88,13 @@ export const Login: React.FC<Props> = ({ onSuccessfulLogin }) => {
       password: pass,
     };
 
-    fetch("/api/login", {
-      method: "post",
-      body: JSON.stringify(loginObj),
-    })
+    fetch(
+      "https://us-central1-fashionable-typescript.cloudfunctions.net/api/login",
+      {
+        method: "post",
+        body: JSON.stringify(loginObj),
+      }
+    )
       .then((res) => res.json())
       .then((res) => {
         if (!res.token) {

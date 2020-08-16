@@ -39,7 +39,9 @@ export const Browse: React.FC<Props> = () => {
 
   useEffect(() => {
     if (!posts) {
-      fetch("/api/posts")
+      fetch(
+        "https://us-central1-fashionable-typescript.cloudfunctions.net/api/posts"
+      )
         .then((res) => res.json())
         .then((result) => {
           setPosts(result);

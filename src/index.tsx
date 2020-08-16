@@ -14,7 +14,7 @@ ReactDOM.render(
       </Router>
     </React.StrictMode>
   </div>,
-  document.getElementById("wrapper")
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

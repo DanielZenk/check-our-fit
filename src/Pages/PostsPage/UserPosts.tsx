@@ -70,11 +70,14 @@ export const UserPosts: React.FC = () => {
 
   useEffect(() => {
     if (!posts) {
-      fetch("/api/myPosts", {
-        headers: {
-          Authorization: `Bearer ${userObject.token}`,
-        },
-      })
+      fetch(
+        "https://us-central1-fashionable-typescript.cloudfunctions.nethttps://us-central1-fashionable-typescript.cloudfunctions.net/api/myPosts",
+        {
+          headers: {
+            Authorization: `Bearer ${userObject.token}`,
+          },
+        }
+      )
         .then((res) => res.json())
         .then((result) => {
           setPosts(result);
@@ -84,12 +87,15 @@ export const UserPosts: React.FC = () => {
   });
 
   const deletePost = (postId: string) => {
-    fetch(`/api/post/${postId}`, {
-      method: "delete",
-      headers: {
-        Authorization: `Bearer ${userObject.token}`,
-      },
-    })
+    fetch(
+      `https://us-central1-fashionable-typescript.cloudfunctions.net/api/post/${postId}`,
+      {
+        method: "delete",
+        headers: {
+          Authorization: `Bearer ${userObject.token}`,
+        },
+      }
+    )
       .then((result) => result.json())
       .then((result) => console.log(result));
   };
