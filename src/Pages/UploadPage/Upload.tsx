@@ -1,16 +1,7 @@
 import React, { useState, useContext } from "react";
 //material components
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Typography,
-  Button,
-  List,
-  ListItem,
-  ListItemText,
-  Fab,
-  ListItemSecondaryAction,
-  Checkbox,
-} from "@material-ui/core";
+import { Typography, Button } from "@material-ui/core";
 //carousel components
 import AwesomeSlider from "react-awesome-slider";
 import "react-awesome-slider/dist/styles.css";
@@ -125,7 +116,7 @@ export const Upload: React.FC = () => {
 
   const [images, setImages] = useState<Array<string> | undefined>(undefined);
 
-  const premadeQuestions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const [imageFiles, setImageFiles] = useState<any>();
 
   const classes = styles();
 
@@ -200,6 +191,7 @@ export const Upload: React.FC = () => {
 
   const handleImageChange = (event: any) => {
     console.log(event.target.files);
+    setImageFiles(event.target.files);
     let tempArr: Array<string> = [];
     Object.values(event.target.files).forEach((image: any) => {
       tempArr.push(URL.createObjectURL(image));
@@ -255,10 +247,10 @@ export const Upload: React.FC = () => {
   };
 
   const handleNextClick = () => {
-    if (currPage === 2) {
+    if (currPage === 1) {
       formatQuestions();
       setPage(currPage + 1);
-    } else if (currPage === 3) {
+    } else if (currPage === 2) {
       fetch(
         `https://us-central1-fashionable-typescript.cloudfunctions.net/api/post`,
         {
@@ -272,6 +264,20 @@ export const Upload: React.FC = () => {
         .then((result) => result.json())
         .then((result) => console.log(result));
     } else {
+      var formdata = new FormData();
+      formdata.append("image", imageFiles[0]);
+      fetch(
+        `https://us-central1-fashionable-typescript.cloudfunctions.net/api/user/image`,
+        {
+          method: "post",
+          headers: {
+            Authorization: `Bearer ${userObj.token}`,
+          },
+          body: formdata,
+        }
+      )
+        .then((result) => result.json())
+        .then((result) => console.log(result));
       setPage(currPage + 1);
     }
   };
@@ -320,7 +326,7 @@ export const Upload: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className={classes.carouselItem}>
+        {/* <div className={classes.carouselItem}>
           <div className={classes.carouselContent}>
             <Typography className={classes.header}>
               You can find some premade questions here:
@@ -338,7 +344,7 @@ export const Upload: React.FC = () => {
               })}
             </List>
           </div>
-        </div>
+        </div> */}
         <div className={classes.carouselItem}>
           <div className={classes.carouselContent}>
             <div className={classes.questionForm}>{renderQuestionForm()}</div>

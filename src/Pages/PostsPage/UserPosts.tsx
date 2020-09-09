@@ -71,7 +71,7 @@ export const UserPosts: React.FC = () => {
   useEffect(() => {
     if (!posts) {
       fetch(
-        "https://us-central1-fashionable-typescript.cloudfunctions.nethttps://us-central1-fashionable-typescript.cloudfunctions.net/api/myPosts",
+        "https://us-central1-fashionable-typescript.cloudfunctions.net/api/myPosts",
         {
           headers: {
             Authorization: `Bearer ${userObject.token}`,

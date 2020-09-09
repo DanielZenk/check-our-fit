@@ -2,6 +2,7 @@ const { admin, db } = require("./admin");
 
 //middleware firebase authentication
 module.exports = (req, res, next) => {
+  res.set('Access-Control-Allow-Origin', '*');
   let idToken;
   if (
     req.headers.authorization &&

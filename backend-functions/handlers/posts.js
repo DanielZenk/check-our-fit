@@ -1,6 +1,7 @@
 const { db } = require("../util/admin");
 
 exports.getAllPosts = (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
   db.collection("posts")
     .orderBy("createdAt", "desc")
     .get()
@@ -18,6 +19,7 @@ exports.getAllPosts = (req, res) => {
 };
 
 exports.getMyPosts = (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
   db.collection("posts")
     .where("handle", "==", req.user.handle)
     .orderBy("createdAt", "desc")
@@ -36,6 +38,7 @@ exports.getMyPosts = (req, res) => {
 };
 
 exports.createPost = (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
   const newPost = {
     handle: req.user.handle,
     createdAt: new Date().toISOString(),
@@ -46,8 +49,8 @@ exports.createPost = (req, res) => {
 
   //console.log(req);
   console.log(req.user);
-
-  const questions = req.body.questions;
+  const parsedBody = JSON.parse(req.body);
+  const questions = parsedBody.questions;
   questions.forEach((question) => {
     const newQuestion = {};
     newQuestion.questionText = question.questionText;
@@ -74,6 +77,7 @@ exports.createPost = (req, res) => {
 };
 
 exports.getPost = (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
   let postData = {};
   db.doc(`/posts/${req.params.postId}`)
     .get()
@@ -88,6 +92,7 @@ exports.getPost = (req, res) => {
 };
 
 exports.answerPost = (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
   const answerDocument = db
     .collection("answeredPosts")
     .where("userHandle", "==", req.user.handle)
@@ -143,6 +148,7 @@ exports.answerPost = (req, res) => {
 
 //Delete post
 exports.deletePost = (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
   const document = db.doc(`/posts/${req.params.postId}`);
   document
     .get()

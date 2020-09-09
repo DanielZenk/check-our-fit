@@ -6,10 +6,15 @@ const firebaseConfig = require("../util/config");
 
 firebase.initializeApp(firebaseConfig);
 
-const { validateSignupData, validateLoginData, reduceUserDetails } = require("../util/validators");
+const {
+  validateSignupData,
+  validateLoginData,
+  reduceUserDetails,
+} = require("../util/validators");
 
 //signup for an account
 exports.signup = (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
   const parsedBody = JSON.parse(req.body);
   const newUser = {
     email: parsedBody.email,
@@ -59,16 +64,28 @@ exports.signup = (req, res) => {
       if (err.code === "auth/email-already-in-use") {
         return res.status(400).json({ email: "Email already in use" });
       }
-      return res.status(500).json({ general: "Something went wrong, please try again" });
+      return res
+        .status(500)
+        .json({ general: "Something went wrong, please try again" });
     });
 };
 
 //login to an account
 exports.login = (req, res) => {
-  const user = {
-    email: JSON.parse(req.body).email,
-    password: JSON.parse(req.body).password,
-  };
+  res.set("Access-Control-Allow-Origin", "*");
+  let user = {};
+  //temp workaround of Postman struggling with stringify
+  if (typeof req.body === "string") {
+    user = {
+      email: JSON.parse(req.body).email,
+      password: JSON.parse(req.body).password,
+    };
+  } else {
+    user = {
+      email: req.body.email,
+      password: req.body.password,
+    };
+  }
 
   const { valid, errors } = validateLoginData(user);
 
@@ -89,12 +106,10 @@ exports.login = (req, res) => {
         err.code === "auth/wrong-password" ||
         err.code === "auth/user-not-found"
       ) {
-        return res
-          .status(403)
-          .json({
-            general:
-              "Credentials do not match an existing user, please try again",
-          });
+        return res.status(403).json({
+          general:
+            "Credentials do not match an existing user, please try again",
+        });
       }
       return res.status(500).json({ error: err.code });
     });
@@ -102,48 +117,55 @@ exports.login = (req, res) => {
 
 //add optional user details
 exports.addUserDetails = (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
   let userDetails = reduceUserDetails(req.body);
 
-  if(Object.keys(userDetails).length === 0) {
-    return res.json({ message: 'No details to be added' });
+  if (Object.keys(userDetails).length === 0) {
+    return res.json({ message: "No details to be added" });
   }
 
-  db.doc(`/users/${req.user.handle}`).update(userDetails)
+  db.doc(`/users/${req.user.handle}`)
+    .update(userDetails)
     .then(() => {
-      return res.json({ message: 'Details added successfully'});
+      return res.json({ message: "Details added successfully" });
     })
-    .catch(err => {
+    .catch((err) => {
       console.error(err);
       return res.status(500).json({ error: err.code });
-    })
-}
+    });
+};
 
 //get own user details
 exports.getAuthenticatedUser = (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
   let userData = {};
-  db.doc(`/users/${req.user.handle}`).get()
-    .then(doc => {
-      if(doc.exists) {
+  db.doc(`/users/${req.user.handle}`)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
         userData.credentials = doc.data();
-        return db.collection('answeredPosts').where('userHandle', '==', req.user.handle).get();
+        return db
+          .collection("answeredPosts")
+          .where("userHandle", "==", req.user.handle)
+          .get();
       }
     })
-    .then(data => {
+    .then((data) => {
       userData.answeredPosts = [];
-      data.forEach(doc => {
+      data.forEach((doc) => {
         userData.answeredPosts.push(doc.data());
       });
       return res.json(userData);
     })
-    .catch(err => {
+    .catch((err) => {
       console.error(err);
       return res.status(500).json({ error: err.code });
-    })
-
-}
+    });
+};
 
 //upload an avatar for a user
 exports.uploadAvatar = (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
   const BusBoy = require("busboy");
   const path = require("path");
   const os = require("os");
@@ -187,7 +209,10 @@ exports.uploadAvatar = (req, res) => {
         return db.doc(`/users/${req.user.handle}`).update({ imageUrl });
       })
       .then(() => {
-        return res.json({ message: "Image uploaded successfully" });
+        return res.json({
+          message: "Image uploaded successfully",
+          url: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${imageFileName}?alt=media`,
+        });
       })
       .catch((err) => {
         console.error(err);

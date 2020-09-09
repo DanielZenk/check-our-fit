@@ -1,9 +1,3 @@
 ## CheckOurFit Backend Functions
 
-Here you can find all the API functions that makes CheckOurFit run. Take note that this doesn't include the config file to actually make this work, as I don't want to expose the API key.
-
-## Tech Used:
-
-Firebase
-
-BusBoy (image uploading)
+This does not contain everything needed to deploy firebase functions. This gives a look into the firebase functions without exposing any information that can be used maliciously. Index.js creates the app api, and imports the functions from the necessary functions in the handlers folder. A middleware auth can be found in util, along with some validators used for login and sign up.
