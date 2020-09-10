@@ -90,7 +90,7 @@ export const UserPosts: React.FC = () => {
     }
   });
 
-  const deletePost = (postId: string) => {
+  const deletePost = (postId: string, index: number) => {
     fetch(
       `https://us-central1-fashionable-typescript.cloudfunctions.net/api/post/${postId}`,
       {
@@ -101,11 +101,15 @@ export const UserPosts: React.FC = () => {
       }
     )
       .then((result) => result.json())
-      .then((result) => console.log(result));
+      .then((result) => {
+        var temp = posts;
+        temp?.splice(index, 1);
+        if (temp) setPosts([...temp]);
+      });
   };
 
   //() => clickCard(id)
-  const renderCard = (post: PostData) => {
+  const renderCard = (post: PostData, index: number) => {
     const newDate = new Date(post.createdAt);
     return (
       <Grid item xs={12} sm={4} md={3}>
@@ -136,7 +140,7 @@ export const UserPosts: React.FC = () => {
             <Button
               size="small"
               color="primary"
-              onClick={() => deletePost(post.postId)}
+              onClick={() => deletePost(post.postId, index)}
             >
               Delete
             </Button>
@@ -151,8 +155,8 @@ export const UserPosts: React.FC = () => {
     if (!posts) {
       return <h1>Loading posts...</h1>;
     }
-    return posts.map((post) => {
-      return renderCard(post);
+    return posts.map((post, index) => {
+      return renderCard(post, index);
     });
   };
 

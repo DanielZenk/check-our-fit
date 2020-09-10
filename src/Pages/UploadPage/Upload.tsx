@@ -1,10 +1,12 @@
-import React, { useState, useContext, useReducer } from "react";
+import React, { useState, useContext } from "react";
 //material components
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Button } from "@material-ui/core";
 //carousel components
 import AwesomeSlider from "react-awesome-slider";
 import "react-awesome-slider/dist/styles.css";
+//router
+import { useHistory } from "react-router-dom";
 //created components
 import { PostCard } from "../../Components/PostCard";
 import { ImageCarousel } from "../../Components/ImageCarousel";
@@ -45,6 +47,7 @@ interface UploadFormat {
     answers: Array<string>;
   }>;
   images: Array<string> | undefined;
+  email: string | undefined;
 }
 
 interface QuestionFormat {
@@ -97,6 +100,9 @@ const styles = makeStyles({
     backgroundColor: "#627E6F",
     color: "white",
   },
+  postCard: {
+    marginBottom: "100px",
+  },
 });
 
 interface fileObject {
@@ -106,6 +112,8 @@ interface fileObject {
 }
 
 export const Upload: React.FC = () => {
+  const history = useHistory();
+
   const userObj = useContext(UserContext);
 
   const [post, setPost] = useState<PostData | undefined>(undefined);
@@ -129,7 +137,7 @@ export const Upload: React.FC = () => {
   const onQuestionChange = (questionText: string, questionNumber: number) => {
     var temp = questions;
     temp[questionNumber].questionText = questionText;
-    modifyQuestions(temp);
+    modifyQuestions([...temp]);
   };
 
   const onDeleteAnswer = (question: QuestionFormat, questionIndex: number) => {
@@ -231,6 +239,7 @@ export const Upload: React.FC = () => {
     var uploadFormattedPost: UploadFormat = {
       questions: [{ questionText: "", answers: [""] }],
       images: undefined,
+      email: undefined,
     };
     questions.forEach((question, index) => {
       newPost.images = images;
@@ -294,6 +303,9 @@ export const Upload: React.FC = () => {
         } else if (finalPostCopy && finalPostCopy.images !== undefined) {
           finalPostCopy.images.push(result.url);
         }
+        if (finalPostCopy && finalPostCopy.email === undefined) {
+          finalPostCopy.email = userObj.email;
+        }
         setFinalPost(finalPostCopy);
         uploadImagesThenPost(imageNum + 1);
         if (imageNum === imageFiles.length - 1) {
@@ -308,7 +320,9 @@ export const Upload: React.FC = () => {
             }
           )
             .then((result) => result.json())
-            .then((result) => console.log(result));
+            .then((result) => {
+              history.push("/");
+            });
         }
       });
   };
@@ -376,32 +390,13 @@ export const Upload: React.FC = () => {
             </div>
           </div>
         </div>
-        {/* <div className={classes.carouselItem}>
-          <div className={classes.carouselContent}>
-            <Typography className={classes.header}>
-              You can find some premade questions here:
-            </Typography>
-            <List className={classes.list}>
-              {premadeQuestions.map((id) => {
-                return (
-                  <ListItem button key={id}>
-                    <ListItemText primary={`Premade question ${id}`} />
-                    <ListItemSecondaryAction>
-                      <Checkbox></Checkbox>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                );
-              })}
-            </List>
-          </div>
-        </div> */}
         <div className={classes.carouselItem}>
           <div className={classes.carouselContent}>
             <div className={classes.questionForm}>{renderQuestionForm()}</div>
           </div>
         </div>
         <div className={classes.carouselItem}>
-          <div className={classes.carouselContent}>
+          <div className={`${classes.carouselContent} ${classes.postCard}`}>
             {post ? <PostCard post={post} /> : null}
           </div>
         </div>

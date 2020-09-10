@@ -59,6 +59,7 @@ interface Props {
     handle?: string;
     userImage?: string;
     images?: Array<string>;
+    email?: string;
   };
 }
 
@@ -106,10 +107,17 @@ export const PostCard: React.FC<Props> = ({ post }) => {
           {userObj.token.length > 2 ? null : (
             <Typography variant="h6">Log in to answer posts!</Typography>
           )}
+          {userObj.email.length > 1 && userObj.email === post.email ? (
+            <Typography variant="h6">
+              You can't answer your own post!
+            </Typography>
+          ) : null}
         </CardContent>
         <CardActions disableSpacing>
           <IconButton
-            disabled={!(userObj.token.length > 2)}
+            disabled={
+              !(userObj.token.length > 2) || userObj.email === post.email
+            }
             className={classes.expandIcon}
             onClick={() => toggleExpansion(!expanded)}
           >

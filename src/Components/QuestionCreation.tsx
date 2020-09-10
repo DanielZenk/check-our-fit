@@ -98,7 +98,7 @@ export const QuestionCreation: React.FC<Props> = ({
           <>
             <TextField
               className={classes.textField}
-              //value={questionText}
+              value={question.questionText}
               variant="outlined"
               multiline
               rows={3}
@@ -117,7 +117,7 @@ export const QuestionCreation: React.FC<Props> = ({
                   label={`Answer ${answerIndex + 1}`}
                   fullWidth
                   onChange={(e) => onAnswerChange(e, answerIndex)}
-                  //value={answer}
+                  value={answer}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
@@ -147,7 +147,7 @@ export const QuestionCreation: React.FC<Props> = ({
                 modifyAnswers((m) => {
                   m.push("");
                   addAnswer(m, index);
-                  return m;
+                  return [...m];
                 });
               }}
             >
