@@ -9,10 +9,8 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-//user context
-import { UserContext } from "../../Context/UserContext";
 //router
-import { Link } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 
 const styles = makeStyles({
   root: {
@@ -25,7 +23,7 @@ const styles = makeStyles({
   },
   button: {
     marginTop: "10px",
-    backgroundColor: "#9b0a0a",
+    backgroundColor: "#D48A34",
     color: "white",
     width: "250px",
     borderRadius: "10px",
@@ -43,21 +41,25 @@ interface errorObj {
   handle: string | undefined;
 }
 
-function SignUp() {
+interface userObjectFormat {
+  email: string;
+  password: string;
+  token: string;
+}
+
+interface Props {
+  onSuccessfulLogin: (user: userObjectFormat) => void;
+}
+
+export const SignUp: React.FC<Props> = ({ onSuccessfulLogin }) => {
   const classes = styles();
 
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [user, setUser] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
-  const [signedUp, isSignedUp] = useState(false);
   const [passVis, togglePassVis] = useState(false);
   const [confirmPassVis, toggleConfirmPassVis] = useState(false);
-  const [contextValue, setContextValue] = useState({
-    email: "",
-    password: "",
-    token: "",
-  });
   const [errors, setErrors] = useState<errorObj>({
     email: undefined,
     password: undefined,
@@ -65,6 +67,10 @@ function SignUp() {
     general: undefined,
     handle: undefined,
   });
+
+  let history = useHistory();
+  let location = useLocation();
+  const from: any = location.state || { from: { pathname: "/" } };
 
   const isValidEmail = () => {
     const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -130,12 +136,8 @@ function SignUp() {
           });
           return;
         }
-        setContextValue({
-          email,
-          password: pass,
-          token: res.token,
-        });
-        isSignedUp(true);
+        onSuccessfulLogin({ email, password: pass, token: res.token });
+        history.replace(from.from);
       });
   };
 
@@ -264,15 +266,7 @@ function SignUp() {
     );
   };
 
-  return (
-    <div>
-      {signedUp ? (
-        <UserContext.Provider value={contextValue}></UserContext.Provider>
-      ) : (
-        renderSignUpSheet()
-      )}
-    </div>
-  );
-}
+  return <div>{renderSignUpSheet()}</div>;
+};
 
 export default SignUp;

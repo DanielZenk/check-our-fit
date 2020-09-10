@@ -13,7 +13,7 @@ const styles = makeStyles({
     width: 250,
   },
   appbar: {
-    backgroundColor: "#9b0a0a",
+    backgroundColor: "#449872",
     color: "white",
     textAlign: "center",
     width: "100%",
@@ -27,9 +27,16 @@ const styles = makeStyles({
     left: 0,
     right: 0,
     margin: "0 auto",
+    backgroundColor: "#D48A34",
   },
   grow: {
     flexGrow: 1,
+  },
+  iconButtons: {
+    color: "#FFFFFF",
+  },
+  addIconFab: {
+    color: "#FFFFFF",
   },
 });
 
@@ -42,18 +49,18 @@ export const BottomBar: React.FC = () => {
         <Toolbar>
           <Link to="/">
             <IconButton edge="start" color="inherit" aria-label="menu">
-              <HomeIcon />
+              <HomeIcon className={classes.iconButtons} />
             </IconButton>
           </Link>
           <Link to="/Upload">
             <Fab aria-label="add" className={classes.fabButton}>
-              <AddIcon />
+              <AddIcon className={classes.addIconFab} />
             </Fab>
           </Link>
           <div className={classes.grow} />
           <Link to="/UserPosts">
             <IconButton edge="end" color="inherit">
-              <AccountCircleIcon />
+              <AccountCircleIcon className={classes.iconButtons} />
             </IconButton>
           </Link>
         </Toolbar>

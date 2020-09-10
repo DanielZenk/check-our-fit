@@ -9,12 +9,7 @@ const styles = makeStyles({
     width: 250,
   },
   appbar: {
-    backgroundColor: "#9b0a0a",
-    color: "white",
-    textAlign: "center",
-    width: "100%",
-    top: "auto",
-    bottom: 0,
+    backgroundColor: "#449872",
   },
   button: {
     color: "white",
@@ -28,18 +23,20 @@ interface Props {
   onNextClick: () => void;
   onBackClick: () => void;
   currPage: number;
+  nextDisabled: boolean;
 }
 
 export const TopBar: React.FC<Props> = ({
   onNextClick,
   onBackClick,
   currPage,
+  nextDisabled,
 }) => {
   const classes = styles();
 
   return (
     <div>
-      <AppBar position="fixed">
+      <AppBar position="fixed" className={classes.appbar}>
         <Toolbar>
           <IconButton
             disabled={currPage === 0}
@@ -51,8 +48,12 @@ export const TopBar: React.FC<Props> = ({
             <ArrowBackIcon />
           </IconButton>
           <div className={classes.grow} />
-          <Button className={classes.button} onClick={() => onNextClick()}>
-            {currPage === 3 ? <>Post</> : <>Next</>}
+          <Button
+            disabled={nextDisabled}
+            className={classes.button}
+            onClick={() => onNextClick()}
+          >
+            {currPage === 2 ? <>Post</> : <>Next</>}
           </Button>
         </Toolbar>
       </AppBar>

@@ -65,7 +65,7 @@ function HomePage() {
             }
           />
           <Route exact path="/SignUp">
-            <SignUp />
+            <SignUp onSuccessfulLogin={(e) => setUserObj(e)} />
           </Route>
         </Switch>
 

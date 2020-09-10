@@ -308,6 +308,10 @@ export const Upload: React.FC = () => {
         currPage={currPage}
         onBackClick={() => setPage(currPage - 1)}
         onNextClick={() => handleNextClick()}
+        nextDisabled={
+          (currPage === 0 && !images) ||
+          (currPage === 1 && questions.length < 1)
+        }
       />
       <AwesomeSlider
         className={classes.slider}
