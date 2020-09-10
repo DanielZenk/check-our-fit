@@ -136,7 +136,6 @@ export const Questionnaire: React.FC<Props> = ({ questions, postId }) => {
             <>
               <Button onClick={() => submitAnswers()}>Submit</Button>
               <Button>Clear</Button>
-              <Button>Skip</Button>
             </>
           ) : null}
         </FormControl>
