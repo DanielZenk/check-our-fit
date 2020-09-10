@@ -31,6 +31,10 @@ interface Props {
     answerNumber: number
   ) => void;
   onDelete: (question: QuestionFormat, questionIndex: number) => void;
+  deleteQuestion: (index: number) => void;
+  addAnswer: (answers: Array<string>, index: number) => void;
+  question: QuestionFormat;
+  questionText: string;
 }
 
 const styles = makeStyles({
@@ -47,9 +51,12 @@ const styles = makeStyles({
 
 export const QuestionCreation: React.FC<Props> = ({
   index,
+  question,
   modifyQuestion,
   modifyAnswer,
   onDelete,
+  deleteQuestion,
+  addAnswer,
 }) => {
   const [cardOpen, toggleCardOpen] = useState(true);
 
@@ -79,7 +86,10 @@ export const QuestionCreation: React.FC<Props> = ({
         <IconButton onClick={() => toggleCardOpen(!cardOpen)}>
           {cardOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         </IconButton>
-        <IconButton className={classes.deleteButton}>
+        <IconButton
+          onClick={() => deleteQuestion(index)}
+          className={classes.deleteButton}
+        >
           <DeleteIcon />
         </IconButton>
       </CardActions>
@@ -88,6 +98,7 @@ export const QuestionCreation: React.FC<Props> = ({
           <>
             <TextField
               className={classes.textField}
+              //value={questionText}
               variant="outlined"
               multiline
               rows={3}
@@ -100,12 +111,13 @@ export const QuestionCreation: React.FC<Props> = ({
             return (
               <>
                 <TextField
+                  key={answerIndex}
                   className={classes.textField}
                   variant="outlined"
                   label={`Answer ${answerIndex + 1}`}
                   fullWidth
                   onChange={(e) => onAnswerChange(e, answerIndex)}
-                  value={answer}
+                  //value={answer}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
@@ -132,7 +144,11 @@ export const QuestionCreation: React.FC<Props> = ({
             <Button
               disabled={answers.length >= 4}
               onClick={() => {
-                modifyAnswers((m) => m.concat([""]));
+                modifyAnswers((m) => {
+                  m.push("");
+                  addAnswer(m, index);
+                  return m;
+                });
               }}
             >
               Add Answer Option

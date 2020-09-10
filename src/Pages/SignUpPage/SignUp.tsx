@@ -23,7 +23,7 @@ const styles = makeStyles({
   },
   button: {
     marginTop: "10px",
-    backgroundColor: "#D48A34",
+    backgroundColor: "#627E6F",
     color: "white",
     width: "250px",
     borderRadius: "10px",

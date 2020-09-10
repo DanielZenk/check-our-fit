@@ -45,6 +45,7 @@ interface PostData {
   totalResponses: number;
   handle: string;
   userImage: string;
+  images: Array<string>;
 }
 
 const styles = makeStyles({
@@ -55,7 +56,10 @@ const styles = makeStyles({
     marginTop: "5px",
   },
   media: {
-    height: 140,
+    height: 340,
+  },
+  gridContainer: {
+    marginBottom: "100px",
   },
 });
 
@@ -109,14 +113,11 @@ export const UserPosts: React.FC = () => {
           <CardActionArea>
             <CardMedia
               className={classes.media}
-              image="https://picsum.photos/id/1018/1000/600/"
+              image={post.images[0]}
               title="Contemplative Reptile"
             />
             <CardContent>
               <Typography gutterBottom variant="h5" component="h2">
-                Title of post can go here
-              </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
                 Created on {newDate.toLocaleDateString()}
               </Typography>
               <Typography variant="body2" color="textSecondary" component="p">
@@ -162,7 +163,7 @@ export const UserPosts: React.FC = () => {
   };
 
   return (
-    <Grid container>
+    <Grid className={classes.gridContainer} container>
       {!currPost ? (
         <Grid item xs={12}>
           <UserCard createdAt="" userImage="" />

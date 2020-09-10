@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 //created components
 import { PostCard } from "../../Components/PostCard";
-
+//styles
+import { makeStyles } from "@material-ui/core/styles";
 interface Props {}
 
 interface PostData {
@@ -34,8 +35,17 @@ interface PostData {
   userImage: string;
 }
 
+const styles = makeStyles({
+  content: {
+    marginBottom: "100px",
+    margninTop: "15px",
+  },
+});
+
 export const Browse: React.FC<Props> = () => {
   const [posts, setPosts] = useState<Array<PostData> | undefined>(undefined);
+
+  const classes = styles();
 
   useEffect(() => {
     if (!posts) {
@@ -58,5 +68,5 @@ export const Browse: React.FC<Props> = () => {
     });
   };
 
-  return <div>{renderPosts()}</div>;
+  return <div className={classes.content}>{renderPosts()}</div>;
 };

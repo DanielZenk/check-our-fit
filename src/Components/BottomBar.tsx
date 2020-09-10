@@ -27,7 +27,7 @@ const styles = makeStyles({
     left: 0,
     right: 0,
     margin: "0 auto",
-    backgroundColor: "#D48A34",
+    backgroundColor: "#627E6F",
   },
   grow: {
     flexGrow: 1,

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useReducer } from "react";
 //material components
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Button } from "@material-ui/core";
@@ -72,6 +72,7 @@ const styles = makeStyles({
   },
   questionForm: {
     marginTop: "40px",
+    marginBottom: "100px",
   },
   carouselItem: {
     top: "50px",
@@ -91,6 +92,10 @@ const styles = makeStyles({
   },
   slider: {
     top: "50px",
+  },
+  imageButton: {
+    backgroundColor: "#627E6F",
+    color: "white",
   },
 });
 
@@ -127,7 +132,7 @@ export const Upload: React.FC = () => {
     modifyQuestions(temp);
   };
 
-  const onDelete = (question: QuestionFormat, questionIndex: number) => {
+  const onDeleteAnswer = (question: QuestionFormat, questionIndex: number) => {
     const temp = questions;
     temp[questionIndex] = question;
     modifyQuestions(temp);
@@ -143,6 +148,19 @@ export const Upload: React.FC = () => {
     modifyQuestions(temp);
   };
 
+  const addAnswer = (answers: Array<string>, index: number) => {
+    var temp = questions;
+    temp[index].answers = answers;
+    modifyQuestions(temp);
+  };
+
+  const deleteQuestion = (index: number) => {
+    var temp = questions;
+    temp.splice(index, 1);
+    modifyQuestions(temp);
+    addQuestion(numQuestions - 1);
+  };
+
   const renderIndividualQuestion = (
     question: QuestionFormat,
     index: number
@@ -152,19 +170,23 @@ export const Upload: React.FC = () => {
         index={index}
         modifyQuestion={(t, n) => onQuestionChange(t, n)}
         modifyAnswer={(t, qN, aN) => onAnswerChange(t, qN, aN)}
-        onDelete={(q, i) => onDelete(q, i)}
+        onDelete={(q, i) => onDeleteAnswer(q, i)}
+        deleteQuestion={deleteQuestion}
+        question={question}
+        questionText={question.questionText}
+        addAnswer={(a, n) => addAnswer(a, n)}
       />
     );
   };
 
   const renderQuestionForm = () => {
     return (
-      <>
+      <div className={classes.questionForm}>
         <Typography className={classes.header}>
           You can add {4 - numQuestions} more questions.
         </Typography>
         <Button
-          className={classes.fab}
+          className={classes.imageButton}
           variant="contained"
           disabled={numQuestions >= 4}
           //variant="extended"
@@ -180,7 +202,7 @@ export const Upload: React.FC = () => {
         {questions?.map((question, index) => {
           return <div>{renderIndividualQuestion(question, index)}</div>;
         })}
-      </>
+      </div>
     );
   };
 
@@ -336,7 +358,11 @@ export const Upload: React.FC = () => {
               accept="image/*"
             />
             <>
-              <Button color="primary" onClick={handleEditPicture}>
+              <Button
+                variant="contained"
+                className={classes.imageButton}
+                onClick={handleEditPicture}
+              >
                 Add Image
               </Button>
             </>
