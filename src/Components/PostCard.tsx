@@ -13,6 +13,9 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import ExpandLess from "@material-ui/icons/ExpandLess";
+//dayjs
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 //created components
 import { ImageCarousel } from "./ImageCarousel";
 //context
@@ -87,13 +90,14 @@ export const PostCard: React.FC<Props> = ({ post }) => {
     if (!post) {
       return null;
     }
+    dayjs.extend(relativeTime);
     return (
       <Card className={classes.card}>
         {post.postId ? (
           <CardHeader
-            avatar={<Avatar alt={post.handle} src={post.userImage} />}
-            title="Need to add title"
-            subheader={post.createdAt}
+            //avatar={<Avatar alt={post.handle} src={post.userImage} />}
+            title={`Posted by ${post.handle}`}
+            subheader={dayjs(post.createdAt).fromNow()}
           />
         ) : null}
 

@@ -44,6 +44,7 @@ interface UploadFormat {
     questionText: string;
     answers: Array<string>;
   }>;
+  images: Array<string> | undefined;
 }
 
 interface QuestionFormat {
@@ -207,6 +208,7 @@ export const Upload: React.FC = () => {
     var newPost: PostData = { questions: [] };
     var uploadFormattedPost: UploadFormat = {
       questions: [{ questionText: "", answers: [""] }],
+      images: undefined,
     };
     questions.forEach((question, index) => {
       newPost.images = images;
@@ -246,38 +248,56 @@ export const Upload: React.FC = () => {
     setFinalPost(uploadFormattedPost);
   };
 
+  const uploadImagesThenPost = (imageNum: number) => {
+    if (imageNum === imageFiles.length) {
+      return;
+    }
+    var formdata = new FormData();
+    formdata.append("image", imageFiles[imageNum]);
+    fetch(
+      `https://us-central1-fashionable-typescript.cloudfunctions.net/api/user/image`,
+      {
+        method: "post",
+        headers: {
+          Authorization: `Bearer ${userObj.token}`,
+        },
+        body: formdata,
+      }
+    )
+      .then((result) => result.json())
+      .then((result) => {
+        let finalPostCopy = finalPost;
+        if (finalPostCopy && finalPostCopy.images === undefined) {
+          finalPostCopy.images = [result.url];
+        } else if (finalPostCopy && finalPostCopy.images !== undefined) {
+          finalPostCopy.images.push(result.url);
+        }
+        setFinalPost(finalPostCopy);
+        uploadImagesThenPost(imageNum + 1);
+        if (imageNum === imageFiles.length - 1) {
+          fetch(
+            `https://us-central1-fashionable-typescript.cloudfunctions.net/api/post`,
+            {
+              method: "post",
+              headers: {
+                Authorization: `Bearer ${userObj.token}`,
+              },
+              body: JSON.stringify(finalPost),
+            }
+          )
+            .then((result) => result.json())
+            .then((result) => console.log(result));
+        }
+      });
+  };
+
   const handleNextClick = () => {
     if (currPage === 1) {
       formatQuestions();
       setPage(currPage + 1);
     } else if (currPage === 2) {
-      fetch(
-        `https://us-central1-fashionable-typescript.cloudfunctions.net/api/post`,
-        {
-          method: "post",
-          headers: {
-            Authorization: `Bearer ${userObj.token}`,
-          },
-          body: JSON.stringify(finalPost),
-        }
-      )
-        .then((result) => result.json())
-        .then((result) => console.log(result));
+      uploadImagesThenPost(0);
     } else {
-      var formdata = new FormData();
-      formdata.append("image", imageFiles[0]);
-      fetch(
-        `https://us-central1-fashionable-typescript.cloudfunctions.net/api/user/image`,
-        {
-          method: "post",
-          headers: {
-            Authorization: `Bearer ${userObj.token}`,
-          },
-          body: formdata,
-        }
-      )
-        .then((result) => result.json())
-        .then((result) => console.log(result));
       setPage(currPage + 1);
     }
   };
