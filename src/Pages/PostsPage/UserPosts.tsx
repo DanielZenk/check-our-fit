@@ -115,7 +115,7 @@ export const UserPosts: React.FC = () => {
     const newDate = new Date(post.createdAt);
     return (
       <Grid item xs={12} sm={4} md={3}>
-        <Card className={classes.card}>
+        <Card raised className={classes.card}>
           <CardActionArea>
             <CardMedia
               className={classes.media}

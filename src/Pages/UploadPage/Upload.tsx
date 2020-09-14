@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 //material components
 import { makeStyles } from "@material-ui/core/styles";
-import { Typography, Button } from "@material-ui/core";
+import { Typography, Button, CircularProgress } from "@material-ui/core";
 //carousel components
 import AwesomeSlider from "react-awesome-slider";
 import "react-awesome-slider/dist/styles.css";
@@ -102,6 +102,12 @@ const styles = makeStyles({
   },
   postCard: {
     marginBottom: "100px",
+  },
+  loadingIcon: {
+    position: "fixed",
+    top: "62%",
+    left: "50%",
+    display: "none",
   },
 });
 
@@ -331,6 +337,10 @@ export const Upload: React.FC = () => {
       formatQuestions();
       setPage(currPage + 1);
     } else if (currPage === 2) {
+      let progress = document.getElementById("progress-circle");
+      if (progress) {
+        progress.style.display = "block";
+      }
       uploadImagesThenPost(0);
     } else {
       setPage(currPage + 1);
@@ -397,6 +407,10 @@ export const Upload: React.FC = () => {
         <div className={classes.carouselItem}>
           <div className={`${classes.carouselContent} ${classes.postCard}`}>
             {post ? <PostCard post={post} /> : null}
+            <CircularProgress
+              id="progress-circle"
+              className={classes.loadingIcon}
+            />
           </div>
         </div>
       </AwesomeSlider>

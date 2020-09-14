@@ -1,7 +1,6 @@
 import React, { useState, Suspense, useContext } from "react";
 //material components
 import {
-  Avatar,
   Card,
   CardHeader,
   CardContent,
@@ -9,7 +8,10 @@ import {
   IconButton,
   Collapse,
   Typography,
+  Snackbar,
 } from "@material-ui/core";
+
+import Alert from "@material-ui/lab/Alert";
 import { makeStyles } from "@material-ui/core/styles";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import ExpandLess from "@material-ui/icons/ExpandLess";
@@ -77,6 +79,8 @@ const styles = makeStyles({
 export const PostCard: React.FC<Props> = ({ post }) => {
   const [expanded, toggleExpansion] = useState(false);
 
+  const [snackbarOpen, toggleSnackbar] = useState(false);
+
   const imagesArray = ["https://picsum.photos/id/1018/1000/600/"];
 
   const classes = styles();
@@ -123,10 +127,24 @@ export const PostCard: React.FC<Props> = ({ post }) => {
         <Collapse in={!post.postId || expanded}>
           <CardContent>
             <Suspense fallback={<h3>Questions being loaded...</h3>}>
-              <Questionnaire questions={post.questions} postId={post.postId} />
+              <Questionnaire
+                onAnswer={() => {
+                  toggleSnackbar(true);
+                  toggleExpansion(false);
+                }}
+                questions={post.questions}
+                postId={post.postId}
+              />
             </Suspense>
           </CardContent>
         </Collapse>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={3000}
+          onClose={() => toggleSnackbar(false)}
+        >
+          <Alert severity="success">Post answered!</Alert>
+        </Snackbar>
       </Card>
     );
   };

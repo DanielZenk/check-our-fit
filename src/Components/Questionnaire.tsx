@@ -29,6 +29,7 @@ interface Props {
     totalResponses: number;
   }>;
   postId?: string;
+  onAnswer: () => void;
 }
 
 interface answersObject {
@@ -65,7 +66,11 @@ const styles = makeStyles({
   },
 });
 
-export const Questionnaire: React.FC<Props> = ({ questions, postId }) => {
+export const Questionnaire: React.FC<Props> = ({
+  questions,
+  postId,
+  onAnswer,
+}) => {
   const classes = styles();
 
   const [answers, setAnswers] = useState<Array<number>>([]);
@@ -125,7 +130,9 @@ export const Questionnaire: React.FC<Props> = ({ questions, postId }) => {
       .then((result) => {
         result.json();
       })
-      .then((result) => {});
+      .then((result) => {
+        onAnswer();
+      });
   };
 
   return (
