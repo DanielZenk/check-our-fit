@@ -182,11 +182,6 @@ export const UserPosts: React.FC = () => {
 
   return (
     <Grid className={classes.gridContainer} container>
-      {!currPost ? (
-        <Grid item xs={12}>
-          <UserCard createdAt="" userImage="" />
-        </Grid>
-      ) : null}
       {!currPost ? renderCards() : renderIndividualPost()}
     </Grid>
   );
