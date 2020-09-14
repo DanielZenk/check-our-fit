@@ -77,11 +77,7 @@ const styles = makeStyles({
 export const PostCard: React.FC<Props> = ({ post }) => {
   const [expanded, toggleExpansion] = useState(false);
 
-  const imagesArray = [
-    "https://picsum.photos/id/1018/1000/600/",
-    "https://picsum.photos/id/1018/1000/600/",
-    "https://picsum.photos/id/1018/1000/600/",
-  ];
+  const imagesArray = ["https://picsum.photos/id/1018/1000/600/"];
 
   const classes = styles();
 
