@@ -61,6 +61,9 @@ const styles = makeStyles({
   gridContainer: {
     marginBottom: "100px",
   },
+  noPostsContainer: {
+    margin: "auto",
+  },
 });
 
 export const UserPosts: React.FC = () => {
@@ -153,6 +156,18 @@ export const UserPosts: React.FC = () => {
   const renderCards = () => {
     if (!posts) {
       return <h1>Loading posts...</h1>;
+    }
+    if (posts.length === 0) {
+      return (
+        <div className={classes.noPostsContainer}>
+          <Typography variant="subtitle1">
+            This is where you would see your posts
+          </Typography>
+          <Typography variant="subtitle1">
+            Click the plus button to make a post!
+          </Typography>
+        </div>
+      );
     }
     return posts.map((post, index) => {
       return renderCard(post, index);
