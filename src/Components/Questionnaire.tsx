@@ -118,9 +118,7 @@ export const Questionnaire: React.FC<Props> = ({ questions, postId }) => {
       .then((result) => {
         result.json();
       })
-      .then((result) => {
-        console.log(result);
-      });
+      .then((result) => {});
   };
 
   return (

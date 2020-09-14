@@ -109,7 +109,7 @@ export const Login: React.FC<Props> = ({ onSuccessfulLogin }) => {
         history.replace(from.from);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   };
 

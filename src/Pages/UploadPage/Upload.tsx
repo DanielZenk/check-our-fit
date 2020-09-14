@@ -221,7 +221,6 @@ export const Upload: React.FC = () => {
   };
 
   const handleImageChange = (event: any) => {
-    console.log(event.target.files);
     setImageFiles(event.target.files);
     let tempArr: Array<string> = [];
     Object.values(event.target.files).forEach((image: any) => {

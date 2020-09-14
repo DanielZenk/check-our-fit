@@ -85,7 +85,6 @@ export const UserPosts: React.FC = () => {
         .then((res) => res.json())
         .then((result) => {
           setPosts(result);
-          console.log(posts);
         });
     }
   });

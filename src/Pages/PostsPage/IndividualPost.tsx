@@ -79,7 +79,6 @@ export const IndividualPost: React.FC<Props> = ({ post }) => {
 
   useEffect(() => {
     if (!formattedData) {
-      console.log(post);
       const newData: Array<PieDatum[]> = [];
       post.questions.forEach((question, qIndex) => {
         newData[qIndex] = [];
@@ -94,7 +93,6 @@ export const IndividualPost: React.FC<Props> = ({ post }) => {
           newData[qIndex].push(temp);
         });
       });
-      console.log(newData);
       setFormattedData(newData);
     }
   });
@@ -114,8 +112,6 @@ export const IndividualPost: React.FC<Props> = ({ post }) => {
 
   const renderGraph = (questionNumber: number) => {
     if (!formattedData) return null;
-    //console.log(formattedData[questionNumber]);
-    console.log(post.questions[questionNumber]);
     return (
       <div style={{ height: 200 }}>
         <ResponsivePie
