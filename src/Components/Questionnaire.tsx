@@ -56,6 +56,13 @@ const styles = makeStyles({
     width: "95%",
     marginLeft: "5px",
   },
+  submitButton: {
+    backgroundColor: "#627E6F",
+    color: "white",
+  },
+  clearButton: {
+    color: "#627E6F",
+  },
 });
 
 export const Questionnaire: React.FC<Props> = ({ questions, postId }) => {
@@ -132,8 +139,14 @@ export const Questionnaire: React.FC<Props> = ({ questions, postId }) => {
         <FormControl fullWidth>
           {postId ? (
             <>
-              <Button onClick={() => submitAnswers()}>Submit</Button>
-              <Button>Clear</Button>
+              <Button
+                variant="contained"
+                className={classes.submitButton}
+                onClick={() => submitAnswers()}
+              >
+                Submit
+              </Button>
+              <Button className={classes.clearButton}>Clear</Button>
             </>
           ) : null}
         </FormControl>

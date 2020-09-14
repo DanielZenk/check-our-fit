@@ -89,7 +89,7 @@ export const PostCard: React.FC<Props> = ({ post }) => {
     }
     dayjs.extend(relativeTime);
     return (
-      <Card className={classes.card}>
+      <Card raised className={classes.card}>
         {post.postId ? (
           <CardHeader
             //avatar={<Avatar alt={post.handle} src={post.userImage} />}
