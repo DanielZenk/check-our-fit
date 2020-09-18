@@ -10,6 +10,7 @@ import {
   CardMedia,
   Typography,
   Grid,
+  CircularProgress,
 } from "@material-ui/core";
 //created components
 import { IndividualPost } from "./IndividualPost";
@@ -64,12 +65,15 @@ const styles = makeStyles({
   noPostsContainer: {
     margin: "auto",
   },
+  loadingCircle: {
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+  },
 });
 
 export const UserPosts: React.FC = () => {
   const classes = styles();
-  //cardId should change to a string if a card is selected
-  const [cardId, clickCard] = useState<string | undefined>(undefined);
   const [posts, setPosts] = useState<Array<PostData> | undefined>(undefined);
   const [currPost, setCurrPost] = useState<PostData | undefined>(undefined);
 
@@ -155,7 +159,7 @@ export const UserPosts: React.FC = () => {
   //map through cards and render
   const renderCards = () => {
     if (!posts) {
-      return <h1>Loading posts...</h1>;
+      return <CircularProgress className={classes.loadingCircle} />;
     }
     if (posts.length === 0) {
       return (

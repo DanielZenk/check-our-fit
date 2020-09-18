@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+//progress circle
+import { CircularProgress } from "@material-ui/core";
 //created components
 import { PostCard } from "../../Components/PostCard";
 //styles
@@ -40,6 +42,11 @@ const styles = makeStyles({
     marginBottom: "100px",
     margninTop: "15px",
   },
+  loadingCircle: {
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+  },
 });
 
 export const Browse: React.FC<Props> = () => {
@@ -61,7 +68,7 @@ export const Browse: React.FC<Props> = () => {
 
   const renderPosts = () => {
     if (!posts) {
-      return <h1>Loading posts...</h1>;
+      return <CircularProgress className={classes.loadingCircle} />;
     }
     return posts.map((post) => {
       return <PostCard key={post.postId} post={post} />;
