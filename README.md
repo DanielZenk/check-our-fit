@@ -1,8 +1,8 @@
 ## CheckOurFit
 
-You're walking through an H&M. Check out those leopard print jeans. Those have got to be stylish right? So you go to the dressing room and throw them on. Funky. Do I like them? I don't know. I need some professional advice on this. Well maybe professional jeans advice doesn't exist. Community advice does exist though!
+Welcome to the code that drives Check Our Fit. This mobile web app was designed to allow users to create posts of their outfits "fits". A post contains pictures along with questions and answers that the poster creates. From there, the rest of the community can answer the questions on the post, and the poster can see the responses!
 
-The purpose of this project is to help you in these situations. You can submit an outfit that you are wearing, and ask questions you want the community to answer. Welcome to the code that drives CheckOurFit!
+You can see the fully functional web application at https://check-our-fit.web.app/. Please use the web app on a mobile device :-)
 
 # Tech Stack Used
 React
